@@ -1,11 +1,11 @@
 package bot.inker.bukkit.nbt.loader.ref;
 
 import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
-import bot.inker.bukkit.nbt.loader.annotation.MinecraftVersion;
+import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 
 import java.util.AbstractList;
 
-@HandleBy(version = MinecraftVersion.v1_16_R3, reference = "net/minecraft/server/v1_16_R3/NBTList")
+@HandleBy(version = CbVersion.v1_16_R3, reference = "net/minecraft/server/v1_16_R3/NBTList")
 public abstract class RefNbtList<T extends RefNbtBase> extends AbstractList<T> implements RefNbtBase {
   RefNbtList() {
     throw new UnsupportedOperationException();

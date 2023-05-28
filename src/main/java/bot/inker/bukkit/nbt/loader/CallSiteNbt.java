@@ -1,7 +1,7 @@
 package bot.inker.bukkit.nbt.loader;
 
 import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
-import bot.inker.bukkit.nbt.loader.annotation.MinecraftVersion;
+import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.MethodRemapper;
@@ -90,7 +90,7 @@ public class CallSiteNbt {
   }
 
   private static String processRef(String rawReference) {
-    return rawReference.replace("[CB_VERSION]", MinecraftVersion.current().name());
+    return rawReference.replace("[CB_VERSION]", CbVersion.current().name());
   }
 
   private static String[] parseMethod(String rawReference) {
@@ -269,10 +269,10 @@ public class CallSiteNbt {
     private HandleBy fetchHandleBy(AnnotatedElement element) {
       HandleBy.List list = element.getAnnotation(HandleBy.List.class);
       if (list != null) {
-        return MinecraftVersion.match(list.value());
+        return CbVersion.match(list.value());
       }
       HandleBy single = element.getAnnotation(HandleBy.class);
-      return MinecraftVersion.match(new HandleBy[]{single});
+      return CbVersion.match(new HandleBy[]{single});
     }
 
     public HandleBy fetchClass(String internalName) {

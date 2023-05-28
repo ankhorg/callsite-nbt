@@ -65,7 +65,12 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> {
   }
 
   public void putByteArray(String key, List<Byte> value) {
-    delegate.setByteArray(key, value);
+    byte[] bytes = new byte[value.size()];
+    for (int i = 0; i < value.size(); i++) {
+      Byte element = value.get(i);
+      bytes[i] = (element == null) ? 0 : element;
+    }
+    delegate.setByteArray(key, bytes);
   }
 
   public void putIntArray(String key, int[] value) {

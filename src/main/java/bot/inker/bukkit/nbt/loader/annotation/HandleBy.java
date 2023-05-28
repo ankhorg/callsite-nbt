@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(HandleBy.List.class)
 public @interface HandleBy {
-  MinecraftVersion version();
+  CbVersion version();
 
   String reference();
 

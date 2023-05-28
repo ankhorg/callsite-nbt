@@ -2,13 +2,14 @@ package bot.inker.bukkit.nbt.loader.annotation;
 
 import org.bukkit.Bukkit;
 
-public enum MinecraftVersion {
+public enum CbVersion {
+  v1_12_R1,
   v1_16_R3,
   v1_19_R3;
 
-  private static final MinecraftVersion CURRENT = valueOf(Bukkit.getServer().getClass().getName().split("\\.")[3]);
+  private static final CbVersion CURRENT = valueOf(Bukkit.getServer().getClass().getName().split("\\.")[3]);
 
-  public static MinecraftVersion current() {
+  public static CbVersion current() {
     return CURRENT;
   }
 
