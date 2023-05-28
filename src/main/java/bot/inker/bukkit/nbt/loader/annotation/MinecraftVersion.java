@@ -8,20 +8,20 @@ public enum MinecraftVersion {
 
   private static final MinecraftVersion CURRENT = valueOf(Bukkit.getServer().getClass().getName().split("\\.")[3]);
 
-  public static MinecraftVersion current(){
+  public static MinecraftVersion current() {
     return CURRENT;
   }
 
-  public static HandleBy match(HandleBy[] handles){
-    if(handles.length == 0){
+  public static HandleBy match(HandleBy[] handles) {
+    if (handles.length == 0) {
       return null;
     }
     HandleBy currentHandle = null;
     for (HandleBy handle : handles) {
-      if(handle.version().ordinal() > CURRENT.ordinal()){
+      if (handle.version().ordinal() > CURRENT.ordinal()) {
         continue;
       }
-      if(currentHandle == null || handle.version().ordinal() > currentHandle.version().ordinal()){
+      if (currentHandle == null || handle.version().ordinal() > currentHandle.version().ordinal()) {
         currentHandle = handle;
       }
     }

@@ -5,7 +5,7 @@ import bot.inker.bukkit.nbt.loader.ref.RefNbtTagByte;
 
 public abstract class Nbt<NMS extends RefNbtBase> {
   static {
-    if(RefNbtBase.class.getName().equals("bot.inker.bukkit.nbt.loader.ref.RefNbtBase")) {
+    if (RefNbtBase.class.getName().equals("bot.inker.bukkit.nbt.loader.ref.RefNbtBase")) {
       throw new IllegalStateException("CallSiteNbt loaded before CallSiteNbt installed, " +
           "you should invoke CallSiteNbt#install before load it.");
     }
@@ -15,6 +15,20 @@ public abstract class Nbt<NMS extends RefNbtBase> {
 
   Nbt(NMS delegate) {
     this.delegate = delegate;
+  }
+
+  @SuppressWarnings("unchecked")
+  static <T extends RefNbtBase> Nbt<T> fromNms(T source) {
+    return (Nbt<T>) fromNmsImpl(source);
+  }
+
+  private static Nbt<?> fromNmsImpl(RefNbtBase source) {
+    if (source == null) {
+      return null;
+    } else if (source instanceof RefNbtTagByte) {
+      return NbtByte.valueOf(((RefNbtTagByte) source).asByte());
+    }
+    throw new UnsupportedOperationException("unknown source: " + source.getClass());
   }
 
   public byte getId() {
@@ -40,25 +54,11 @@ public abstract class Nbt<NMS extends RefNbtBase> {
     return delegate;
   }
 
-  @SuppressWarnings("unchecked")
-  static <T extends RefNbtBase> Nbt<T> fromNms(T source){
-    return (Nbt<T>) fromNmsImpl(source);
-  }
-
   @Override
   public abstract Nbt<NMS> clone();
 
   @SuppressWarnings("unchecked")
-  protected NMS cloneNms(){
+  protected NMS cloneNms() {
     return (NMS) delegate.rClone();
-  }
-
-  private static Nbt<?> fromNmsImpl(RefNbtBase source){
-    if(source == null){
-      return null;
-    }else if (source instanceof RefNbtTagByte) {
-      return NbtByte.valueOf(((RefNbtTagByte) source).asByte());
-    }
-    throw new UnsupportedOperationException("unknown source: " + source.getClass());
   }
 }

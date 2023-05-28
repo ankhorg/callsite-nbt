@@ -5,7 +5,7 @@ import bot.inker.bukkit.nbt.loader.annotation.MinecraftVersion;
 
 @HandleBy(version = MinecraftVersion.v1_16_R3, reference = "net/minecraft/server/v1_16_R3/NBTTagFloat")
 public final class RefNbtTagFloat extends RefNbtNumber {
-  private RefNbtTagFloat(){
+  private RefNbtTagFloat() {
     throw new UnsupportedOperationException();
   }
 

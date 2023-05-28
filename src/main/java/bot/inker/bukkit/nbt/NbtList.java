@@ -8,7 +8,7 @@ public final class NbtList extends NbtCollection<RefNbtTagList, RefNbtBase, Nbt<
     super(delegate);
   }
 
-  public NbtList(){
+  public NbtList() {
     super(new RefNbtTagList());
   }
 

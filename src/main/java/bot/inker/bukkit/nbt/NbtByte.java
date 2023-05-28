@@ -11,12 +11,7 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> {
     super(delegate);
   }
 
-  @Override
-  public NbtByte clone() {
-    return this;
-  }
-
-  private static NbtByte[] buildInstanceCache(){
+  private static NbtByte[] buildInstanceCache() {
     NbtByte[] result = new NbtByte[256];
     for (int i = 0; i < result.length; i++) {
       result[i] = new NbtByte(RefNbtTagByte.of((byte) (i - 128)));
@@ -24,11 +19,16 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> {
     return result;
   }
 
-  public static NbtByte valueOf(byte value){
+  public static NbtByte valueOf(byte value) {
     return instanceCache[value + 128];
   }
 
-  public static NbtByte valueOf(boolean value){
+  public static NbtByte valueOf(boolean value) {
     return value ? trueInstance : falseInstance;
+  }
+
+  @Override
+  public NbtByte clone() {
+    return this;
   }
 }

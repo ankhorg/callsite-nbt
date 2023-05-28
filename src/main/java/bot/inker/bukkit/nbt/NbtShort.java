@@ -9,12 +9,7 @@ public final class NbtShort extends NbtNumeric<RefNbtTagShort> {
     super(delegate);
   }
 
-  @Override
-  public NbtShort clone() {
-    return this;
-  }
-
-  private static NbtShort[] buildInstanceCache(){
+  private static NbtShort[] buildInstanceCache() {
     NbtShort[] result = new NbtShort[1153];
     for (int i = 0; i < result.length; i++) {
       result[i] = new NbtShort(RefNbtTagShort.of((short) (i - 128)));
@@ -22,7 +17,12 @@ public final class NbtShort extends NbtNumeric<RefNbtTagShort> {
     return result;
   }
 
-  public static NbtShort valueOf(short value){
+  public static NbtShort valueOf(short value) {
     return (value >= -128 && value <= 1024) ? instanceCache[value + 128] : new NbtShort(RefNbtTagShort.of(value));
+  }
+
+  @Override
+  public NbtShort clone() {
+    return this;
   }
 }

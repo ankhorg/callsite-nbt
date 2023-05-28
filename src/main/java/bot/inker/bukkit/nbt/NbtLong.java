@@ -9,12 +9,7 @@ public final class NbtLong extends NbtNumeric<RefNbtTagLong> {
     super(delegate);
   }
 
-  @Override
-  public NbtLong clone() {
-    return this;
-  }
-
-  private static NbtLong[] buildInstanceCache(){
+  private static NbtLong[] buildInstanceCache() {
     NbtLong[] result = new NbtLong[1153];
     for (int i = 0; i < result.length; i++) {
       result[i] = new NbtLong(RefNbtTagLong.of(i - 128));
@@ -22,7 +17,12 @@ public final class NbtLong extends NbtNumeric<RefNbtTagLong> {
     return result;
   }
 
-  public static NbtLong valueOf(long value){
+  public static NbtLong valueOf(long value) {
     return (value >= -128 && value <= 1024) ? instanceCache[(int) value + 128] : new NbtLong(RefNbtTagLong.of(value));
+  }
+
+  @Override
+  public NbtLong clone() {
+    return this;
   }
 }

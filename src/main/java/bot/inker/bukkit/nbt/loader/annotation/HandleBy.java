@@ -7,8 +7,11 @@ import java.lang.annotation.*;
 @Repeatable(HandleBy.List.class)
 public @interface HandleBy {
   MinecraftVersion version();
+
   String reference();
+
   boolean isInterface() default false;
+
   boolean remap() default false;
 
 

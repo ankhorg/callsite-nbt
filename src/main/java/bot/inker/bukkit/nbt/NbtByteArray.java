@@ -10,11 +10,11 @@ public final class NbtByteArray extends NbtCollection<RefNbtTagByteArray, RefNbt
     super(delegate);
   }
 
-  public NbtByteArray(byte[] value){
-   super(new RefNbtTagByteArray(value));
+  public NbtByteArray(byte[] value) {
+    super(new RefNbtTagByteArray(value));
   }
 
-  public NbtByteArray(List<Byte> value){
+  public NbtByteArray(List<Byte> value) {
     super(new RefNbtTagByteArray(value));
   }
 

@@ -4,8 +4,8 @@ import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 import bot.inker.bukkit.nbt.loader.annotation.MinecraftVersion;
 
 @HandleBy(version = MinecraftVersion.v1_16_R3, reference = "net/minecraft/server/v1_16_R3/NBTTagShort")
-public final class RefNbtTagShort extends RefNbtNumber{
-  private RefNbtTagShort(){
+public final class RefNbtTagShort extends RefNbtNumber {
+  private RefNbtTagShort() {
     throw new UnsupportedOperationException();
   }
 

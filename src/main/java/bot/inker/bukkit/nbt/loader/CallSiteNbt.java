@@ -4,22 +4,17 @@ import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 import bot.inker.bukkit.nbt.loader.annotation.MinecraftVersion;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.ClassRemapper;
-import org.objectweb.asm.commons.FieldRemapper;
 import org.objectweb.asm.commons.MethodRemapper;
 import org.objectweb.asm.commons.Remapper;
 
 import java.io.*;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -38,18 +33,18 @@ public class CallSiteNbt {
   private static TransformRemapper transformRemapper;
 
   static {
-    CSN_PACKAGE = "bot.inker.bukkit.nbt.".replace('.','.');
+    CSN_PACKAGE = "bot.inker.bukkit.nbt.".replace('.', '.');
     CSN_CLASS_FILE_PREFIX = CSN_PACKAGE.replace('.', '/');
 
-    CSN_LOADER_PACKAGE = "bot.inker.bukkit.nbt.loader.".replace('.','.');
+    CSN_LOADER_PACKAGE = "bot.inker.bukkit.nbt.loader.".replace('.', '.');
     CSN_LOADER_CLASS_FILE_PREFIX = CSN_LOADER_PACKAGE.replace('.', '/');
 
     CSN_REF_PACKAGE = "bot.inker.bukkit.nbt.loader.ref.".replace('.', '.');
     CSN_REF_PACKAGE_INTERNAL = CSN_REF_PACKAGE.replace('.', '/');
   }
 
-  public static void install(Class<?> clazz){
-    if(!loaded) {
+  public static void install(Class<?> clazz) {
+    if (!loaded) {
       try {
         installImpl(clazz);
         loaded = true;
@@ -62,7 +57,7 @@ public class CallSiteNbt {
   private static void installImpl(Class<?> clazz) throws ReflectiveOperationException, IOException {
     Class<?> pluginClassLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader");
     ClassLoader classLoader = clazz.getClassLoader();
-    if(classLoader.getClass() != pluginClassLoaderClass){
+    if (classLoader.getClass() != pluginClassLoaderClass) {
       throw new IllegalStateException("CallSiteNbt can only install in PluginClassLoader");
     }
     Field fileField = pluginClassLoaderClass.getDeclaredField("file");
@@ -76,7 +71,7 @@ public class CallSiteNbt {
     transformRemapper = new TransformRemapper(new RefOnlyClassLoader(classLoader, pluginJar));
   }
 
-  private static byte[] transformBaseClass(byte[] input){
+  private static byte[] transformBaseClass(byte[] input) {
     ClassReader reader = new ClassReader(input);
     ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
     ClassVisitor visitor = new TransformClassVisitor(writer, transformRemapper);
@@ -98,7 +93,7 @@ public class CallSiteNbt {
     return rawReference.replace("[CB_VERSION]", MinecraftVersion.current().name());
   }
 
-  private static String[] parseMethod(String rawReference){
+  private static String[] parseMethod(String rawReference) {
     String reference = processRef(rawReference);
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf('(', firstSplitIndex);
@@ -109,7 +104,7 @@ public class CallSiteNbt {
     return result;
   }
 
-  private static String[] parseField(String rawReference){
+  private static String[] parseField(String rawReference) {
     String reference = processRef(rawReference);
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf(':');
@@ -159,17 +154,17 @@ public class CallSiteNbt {
           && !ze.getName().startsWith(CSN_LOADER_CLASS_FILE_PREFIX)
           && ze.getName().endsWith(".class")) {
         byte[] bytes;
-        try(InputStream in = jarFile.getInputStream(ze)){
+        try (InputStream in = jarFile.getInputStream(ze)) {
           bytes = readAllBytes(in);
         }
         bytes = transformBaseClass(bytes);
-        if(true) {
+        if (true) {
           Path dumpPath = Paths.get("callsite-nbt", ze.getName());
           Files.createDirectories(dumpPath.getParent());
           Files.write(dumpPath, bytes);
         }
         return new ByteArrayInputStream(bytes);
-      }else{
+      } else {
         return jarFile.getInputStream(ze);
       }
     }
@@ -208,7 +203,7 @@ public class CallSiteNbt {
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
       synchronized (getClassLoadingLock(name)) {
         Class<?> c = findLoadedClass(name);
-        if(c == null){
+        if (c == null) {
           c = name.startsWith(CSN_REF_PACKAGE) ? findClass(name) : getParent().loadClass(name);
         }
         if (resolve) {
@@ -220,14 +215,14 @@ public class CallSiteNbt {
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-      if(name.startsWith(CSN_REF_PACKAGE)) {
+      if (name.startsWith(CSN_REF_PACKAGE)) {
         String path = name.replace('.', '/').concat(".class");
         JarEntry entry = jar.getJarEntry(path);
-        if(entry != null){
+        if (entry != null) {
           try (InputStream in = jar.getInputStream(entry)) {
             byte[] bytes = readAllBytes(in);
             return defineClass(name, bytes, 0, bytes.length, null);
-          }catch (IOException e){
+          } catch (IOException e) {
             throw new ClassNotFoundException(name, e);
           }
         }
@@ -243,15 +238,15 @@ public class CallSiteNbt {
       this.refOnlyClassLoader = refOnlyClassLoader;
     }
 
-    private Class<?> fetchRefClass(String internalName){
-      try{
+    private Class<?> fetchRefClass(String internalName) {
+      try {
         return refOnlyClassLoader.loadClass(internalName.replace('/', '.'));
-      }catch (ClassNotFoundException e){
+      } catch (ClassNotFoundException e) {
         throw new IllegalStateException("No ref class found: " + internalName);
       }
     }
 
-    private Field fetchRefField(String owner, String name, String descriptor){
+    private Field fetchRefField(String owner, String name, String descriptor) {
       Class<?> clazz = fetchRefClass(owner);
       for (Field field : clazz.getFields()) {
         if (field.getName().equals(name) && Type.getDescriptor(field.getType()).equals(descriptor)) {
@@ -261,7 +256,7 @@ public class CallSiteNbt {
       throw new IllegalStateException("No ref class field found: L" + owner + ";" + name + ":" + descriptor);
     }
 
-    private Method fetchRefMethod(String owner, String name, String descriptor){
+    private Method fetchRefMethod(String owner, String name, String descriptor) {
       Class<?> clazz = fetchRefClass(owner);
       for (Method method : clazz.getMethods()) {
         if (method.getName().equals(name) && Type.getType(method).getDescriptor().equals(descriptor)) {
@@ -271,13 +266,13 @@ public class CallSiteNbt {
       throw new IllegalStateException("No ref class method found: L" + owner + ";" + name + descriptor);
     }
 
-    private HandleBy fetchHandleBy(AnnotatedElement element){
+    private HandleBy fetchHandleBy(AnnotatedElement element) {
       HandleBy.List list = element.getAnnotation(HandleBy.List.class);
-      if(list != null){
+      if (list != null) {
         return MinecraftVersion.match(list.value());
       }
       HandleBy single = element.getAnnotation(HandleBy.class);
-      return MinecraftVersion.match(new HandleBy[]{ single });
+      return MinecraftVersion.match(new HandleBy[]{single});
     }
 
     public HandleBy fetchClass(String internalName) {
@@ -294,7 +289,7 @@ public class CallSiteNbt {
 
     @Override
     public String mapMethodName(String owner, String name, String descriptor) {
-      if(!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)){
+      if (!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
         return name;
       }
       String[] reference = parseMethod(fetchMethod(owner, name, descriptor).reference());
@@ -303,7 +298,7 @@ public class CallSiteNbt {
 
     @Override
     public String mapFieldName(String owner, String name, String descriptor) {
-      if(!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)){
+      if (!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
         return name;
       }
       String[] reference = parseField(fetchField(owner, name, descriptor).reference());
@@ -312,7 +307,7 @@ public class CallSiteNbt {
 
     @Override
     public String map(String internalName) {
-      if(!internalName.startsWith(CSN_REF_PACKAGE_INTERNAL)){
+      if (!internalName.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
         return internalName;
       }
       return fetchClass(internalName).reference();
@@ -343,7 +338,7 @@ public class CallSiteNbt {
 
     @Override
     public void visitMethodInsn(int opcodeAndSource, String owner, String name, String descriptor, boolean isInterface) {
-      if(!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)){
+      if (!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
         super.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
         return;
       }
@@ -351,7 +346,7 @@ public class CallSiteNbt {
       int opcode = opcodeAndSource & ~Opcodes.SOURCE_MASK;
 
       HandleBy handleBy = remapper.fetchMethod(owner, name, descriptor);
-      if(opcode != Opcodes.INVOKESTATIC){
+      if (opcode != Opcodes.INVOKESTATIC) {
         opcode = handleBy.isInterface() ? Opcodes.INVOKEINTERFACE : Opcodes.INVOKEVIRTUAL;
       }
       String[] reference = parseMethod(handleBy.reference());

@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 public abstract class NbtCollection<NMS extends RefNbtList<T>, T extends RefNbtBase, R extends Nbt<T>> extends Nbt<NMS> implements List<R> {
-  private static final Function fromNmsFunction = it->Nbt.fromNms((RefNbtBase) it);
+  private static final Function fromNmsFunction = it -> Nbt.fromNms((RefNbtBase) it);
   private static final Function nbtRawFunction = it -> ((Nbt<?>) it).raw();
 
   private final MapList<T, R> mapList;

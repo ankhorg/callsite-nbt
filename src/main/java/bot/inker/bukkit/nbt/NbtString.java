@@ -9,12 +9,12 @@ public class NbtString extends Nbt<RefNbtTagString> {
     super(delegate);
   }
 
+  public static NbtString valueOf(String value) {
+    return value.isEmpty() ? EMPTY : new NbtString(RefNbtTagString.of(value));
+  }
+
   @Override
   public NbtString clone() {
     return new NbtString(cloneNms());
-  }
-
-  public static NbtString valueOf(String value){
-    return value.isEmpty() ? EMPTY : new NbtString(RefNbtTagString.of(value));
   }
 }

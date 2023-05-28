@@ -9,12 +9,12 @@ public final class NbtDouble extends NbtNumeric<RefNbtTagDouble> {
     super(delegate);
   }
 
+  public static NbtDouble valueOf(double value) {
+    return value == 0.0 ? ZERO : new NbtDouble(RefNbtTagDouble.of(value));
+  }
+
   @Override
   public NbtDouble clone() {
     return this;
-  }
-
-  public static NbtDouble valueOf(double value){
-    return value == 0.0 ? ZERO : new NbtDouble(RefNbtTagDouble.of(value));
   }
 }
