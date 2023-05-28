@@ -1,0 +1,7 @@
+name: callsite-nbt
+version: 1.0-SNAPSHOT
+main: bot.inker.bukkit.nbt.loader.CallsiteNbtPlugin
+load: STARTUP
+authors:
+  - InkerBot
+softdepend: [ ]
