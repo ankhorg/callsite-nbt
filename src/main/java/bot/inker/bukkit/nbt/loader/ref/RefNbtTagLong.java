@@ -1,11 +1,13 @@
 package bot.inker.bukkit.nbt.loader.ref;
 
-import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
+import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 
-@HandleBy(version = CbVersion.v1_16_R3, reference = "net/minecraft/server/v1_16_R3/NBTTagLong")
+@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/NBTTagLong")
 public final class RefNbtTagLong extends RefNbtNumber {
-  private RefNbtTagLong() {
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagLong;<init>(J)V")
+  @HandleBy(version = CbVersion.v1_16_R3, reference = "")
+  public RefNbtTagLong(long value) {
     throw new UnsupportedOperationException();
   }
 

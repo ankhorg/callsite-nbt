@@ -1,8 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import bot.inker.bukkit.nbt.loader.ref.RefNbtTagByte;
 
 public final class NbtByte extends NbtNumeric<RefNbtTagByte> {
+  private static final boolean OF_SUPPORTED = CbVersion.v1_16_R3.isSupport();
   private static final NbtByte[] instanceCache = buildInstanceCache();
   private static final NbtByte falseInstance = valueOf((byte) 0);
   private static final NbtByte trueInstance = valueOf((byte) 1);
@@ -14,7 +16,9 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> {
   private static NbtByte[] buildInstanceCache() {
     NbtByte[] result = new NbtByte[256];
     for (int i = 0; i < result.length; i++) {
-      result[i] = new NbtByte(RefNbtTagByte.of((byte) (i - 128)));
+      result[i] = OF_SUPPORTED
+          ? new NbtByte(RefNbtTagByte.of((byte) (i - 128)))
+          : new NbtByte(new RefNbtTagByte((byte) (i - 128)));
     }
     return result;
   }

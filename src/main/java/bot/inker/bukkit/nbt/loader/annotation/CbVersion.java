@@ -3,8 +3,10 @@ package bot.inker.bukkit.nbt.loader.annotation;
 import org.bukkit.Bukkit;
 
 public enum CbVersion {
+  ALL,
   v1_12_R1,
   v1_16_R3,
+  v1_17_R1,
   v1_19_R3;
 
   private static final CbVersion CURRENT = valueOf(Bukkit.getServer().getClass().getName().split("\\.")[3]);
@@ -27,5 +29,9 @@ public enum CbVersion {
       }
     }
     return currentHandle;
+  }
+
+  public boolean isSupport() {
+    return current().ordinal() >= ordinal();
   }
 }

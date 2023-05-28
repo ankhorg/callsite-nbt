@@ -1,16 +1,15 @@
 package bot.inker.bukkit.nbt.loader;
 
-import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
+import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.MethodRemapper;
 import org.objectweb.asm.commons.Remapper;
 
 import java.io.*;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -89,30 +88,68 @@ public class CallSiteNbt {
     return out.toByteArray();
   }
 
-  private static String processRef(String rawReference) {
-    return rawReference.replace("[CB_VERSION]", CbVersion.current().name());
-  }
-
-  private static String[] parseMethod(String rawReference) {
-    String reference = processRef(rawReference);
+  private static String[] parseMethod(String reference) {
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf('(', firstSplitIndex);
     String[] result = new String[3];
-    result[0] = reference.substring(1, firstSplitIndex);
+    result[0] = parseType(
+        Type.getObjectType(reference.substring(1, firstSplitIndex))
+    ).getInternalName();
     result[1] = reference.substring(firstSplitIndex + 1, secondSplitIndex);
-    result[2] = reference.substring(secondSplitIndex);
+    result[2] = parseType(
+        Type.getMethodType(reference.substring(secondSplitIndex))
+    ).getDescriptor();
     return result;
   }
 
-  private static String[] parseField(String rawReference) {
-    String reference = processRef(rawReference);
+  private static String[] parseField(String reference) {
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf(':');
     String[] result = new String[3];
-    result[0] = reference.substring(1, firstSplitIndex);
+    result[0] = parseType(
+        Type.getObjectType(reference.substring(1, firstSplitIndex))
+    ).getInternalName();
     result[1] = reference.substring(firstSplitIndex + 1, secondSplitIndex);
-    result[2] = reference.substring(secondSplitIndex + 1);
+    result[2] = parseType(
+        Type.getType(reference.substring(secondSplitIndex + 1))
+    ).getDescriptor();
     return result;
+  }
+
+  private static String parseClass(String reference) {
+    return parseType(Type.getObjectType(reference)).getInternalName();
+  }
+
+  private static Type parseType(Type type) {
+    switch (type.getSort()) {
+      case Type.ARRAY:
+        StringBuilder remappedDescriptor = new StringBuilder();
+        for (int i = 0; i < type.getDimensions(); ++i) {
+          remappedDescriptor.append('[');
+        }
+        remappedDescriptor.append(parseType(type.getElementType()).getDescriptor());
+        return Type.getType(remappedDescriptor.toString());
+      case Type.OBJECT:
+        String matchedPrefix, internalName = type.getInternalName();
+        if(internalName.startsWith("org/bukkit/craftbukkit/")){
+          matchedPrefix = "org/bukkit/craftbukkit/";
+        } else if (!CbVersion.v1_17_R1.isSupport() && internalName.startsWith("net/minecraft/server/")) {
+          matchedPrefix = "net/minecraft/server/";
+        } else {
+          return type;
+        }
+        int splitIndex = internalName.indexOf('/', matchedPrefix.length());
+        return Type.getObjectType(matchedPrefix + CbVersion.current() + internalName.substring(splitIndex));
+      case Type.METHOD:
+        Type methodType = Type.getMethodType(type.getDescriptor());
+        Type[] newArgumentTypes = new Type[methodType.getArgumentTypes().length];
+        for (int i = 0; i < newArgumentTypes.length; i++) {
+          newArgumentTypes[i] = parseType(methodType.getArgumentTypes()[i]);
+        }
+        return Type.getMethodType(parseType(methodType.getReturnType()), newArgumentTypes);
+      default:
+        return type;
+    }
   }
 
   private static class DelegateJarFile extends JarFile {
@@ -256,10 +293,12 @@ public class CallSiteNbt {
       throw new IllegalStateException("No ref class field found: L" + owner + ";" + name + ":" + descriptor);
     }
 
-    private Method fetchRefMethod(String owner, String name, String descriptor) {
+    private Executable fetchRefMethod(String owner, String name, String descriptor) {
       Class<?> clazz = fetchRefClass(owner);
-      for (Method method : clazz.getMethods()) {
-        if (method.getName().equals(name) && Type.getType(method).getDescriptor().equals(descriptor)) {
+      boolean isInit = name.equals("<init>");
+      for (Executable method : isInit ? clazz.getConstructors() : clazz.getMethods()) {
+        Type methodType = isInit ? Type.getType((Constructor<?>) method) : Type.getType((Method) method);
+        if ((isInit || method.getName().equals(name)) && methodType.getDescriptor().equals(descriptor)) {
           return method;
         }
       }
@@ -292,7 +331,11 @@ public class CallSiteNbt {
       if (!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
         return name;
       }
-      String[] reference = parseMethod(fetchMethod(owner, name, descriptor).reference());
+      HandleBy handleBy = fetchMethod(owner, name, descriptor);
+      if(handleBy == null || handleBy.reference().isEmpty()){
+        return name;
+      }
+      String[] reference = parseMethod(handleBy.reference());
       return reference[1];
     }
 
@@ -301,7 +344,11 @@ public class CallSiteNbt {
       if (!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
         return name;
       }
-      String[] reference = parseField(fetchField(owner, name, descriptor).reference());
+      HandleBy handleBy = fetchField(owner, name, descriptor);
+      if(handleBy == null || handleBy.reference().isEmpty()){
+        return name;
+      }
+      String[] reference = parseField(handleBy.reference());
       return reference[1];
     }
 
@@ -310,7 +357,11 @@ public class CallSiteNbt {
       if (!internalName.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
         return internalName;
       }
-      return fetchClass(internalName).reference();
+      HandleBy handleBy = fetchClass(internalName);
+      if(handleBy == null || handleBy.reference().isEmpty()){
+        return internalName;
+      }
+      return parseClass(handleBy.reference());
     }
   }
 
@@ -336,6 +387,27 @@ public class CallSiteNbt {
       this.remapper = remapper;
     }
 
+    private void visitThrow(String message) {
+      super.visitLdcInsn(message);
+      super.visitMethodInsn(Opcodes.INVOKESTATIC, "bot/inker/bukkit/nbt/loader/CallSiteNbt$Spy", "throwException", "(Ljava/lang/String;)V", false);
+    }
+
+    @Override
+    public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
+      if (!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
+        super.visitFieldInsn(opcode, owner, name, descriptor);
+        return;
+      }
+      HandleBy handleBy = remapper.fetchField(owner, name, descriptor);
+      if(handleBy == null || handleBy.reference().isEmpty()){
+        visitThrow("field L" + owner + ";" +  name + ":" + descriptor + " not available in this minecraft version");
+        super.visitFieldInsn(opcode, owner, name, descriptor);
+        return;
+      }
+      String[] reference = parseField(handleBy.reference());
+      super.visitFieldInsn(opcode, reference[0], reference[1], reference[2]);
+    }
+
     @Override
     public void visitMethodInsn(int opcodeAndSource, String owner, String name, String descriptor, boolean isInterface) {
       if (!owner.startsWith(CSN_REF_PACKAGE_INTERNAL)) {
@@ -346,11 +418,21 @@ public class CallSiteNbt {
       int opcode = opcodeAndSource & ~Opcodes.SOURCE_MASK;
 
       HandleBy handleBy = remapper.fetchMethod(owner, name, descriptor);
-      if (opcode != Opcodes.INVOKESTATIC) {
-        opcode = handleBy.isInterface() ? Opcodes.INVOKEINTERFACE : Opcodes.INVOKEVIRTUAL;
+      if(handleBy == null || handleBy.reference().isEmpty()){
+        visitThrow("method L" + owner + ";" +  name + descriptor + " not available in this minecraft version");
+        super.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
+        return;
+      }
+      if (handleBy.isInterface()) {
+        opcode = Opcodes.INVOKEINTERFACE;
       }
       String[] reference = parseMethod(handleBy.reference());
-      super.visitMethodInsn(opcode | source, reference[0], reference[1], reference[2], isInterface);
+      super.visitMethodInsn(opcode | source, reference[0], reference[1], reference[2], handleBy.isInterface());
+    }
+  }
+  public static class Spy {
+    public static void throwException(String message){
+      throw new IllegalStateException(message);
     }
   }
 }

@@ -1,11 +1,10 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.loader.ref.RefNbtTagInt;
 import bot.inker.bukkit.nbt.loader.ref.RefNbtTagIntArray;
 
 import java.util.List;
 
-public final class NbtIntArray extends NbtCollection<RefNbtTagIntArray, RefNbtTagInt, NbtInt> {
+public final class NbtIntArray extends Nbt<RefNbtTagIntArray> {
   NbtIntArray(RefNbtTagIntArray delegate) {
     super(delegate);
   }
@@ -16,6 +15,10 @@ public final class NbtIntArray extends NbtCollection<RefNbtTagIntArray, RefNbtTa
 
   public NbtIntArray(List<Integer> value) {
     super(new RefNbtTagIntArray(value));
+  }
+
+  public int[] getAsIntArray() {
+    return delegate.getInts();
   }
 
   @Override

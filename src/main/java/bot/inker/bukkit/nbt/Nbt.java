@@ -50,10 +50,6 @@ public abstract class Nbt<NMS extends RefNbtBase> {
     return o instanceof Nbt && delegate.equals(((Nbt<?>) o).delegate);
   }
 
-  NMS raw() {
-    return delegate;
-  }
-
   @Override
   public abstract Nbt<NMS> clone();
 
