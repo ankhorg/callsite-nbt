@@ -8,6 +8,11 @@ allprojects {
 
   group = "org.inksnow"
   version = "1.0-SNAPSHOT"
+
+  java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 }
 
 repositories {
@@ -21,6 +26,10 @@ dependencies {
   implementation("org.ow2.asm:asm-commons:9.4")
 
   compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+}
+
+tasks.shadowJar {
+  relocate("org.objectweb.asm", "bot.inker.bukkit.nbt.loader.asm")
 }
 
 tasks.assemble {

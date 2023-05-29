@@ -1,5 +1,6 @@
 package bot.inker.bukkit.nbt.loader;
 
+import bot.inker.bukkit.nbt.*;
 import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 import org.objectweb.asm.Type;
@@ -7,8 +8,10 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.commons.MethodRemapper;
 import org.objectweb.asm.commons.Remapper;
+import sun.misc.Unsafe;
 
 import java.io.*;
+import java.lang.invoke.*;
 import java.lang.reflect.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +32,7 @@ public class CallSiteNbt {
   private static final String CSN_REF_PACKAGE_INTERNAL;
 
   private static boolean loaded = false;
+  private static MethodHandles.Lookup lookup;
   private static TransformRemapper transformRemapper;
 
   static {
@@ -46,10 +50,18 @@ public class CallSiteNbt {
     if (!loaded) {
       try {
         installImpl(clazz);
-        loaded = true;
       } catch (ReflectiveOperationException | IOException e) {
         throw new IllegalStateException("Failed to install CallSiteNbt", e);
       }
+      Class<?>[] classes = new Class<?>[]{
+          Nbt.class, NbtByte.class, NbtByteArray.class, NbtCompound.class, NbtDouble.class, NbtEnd.class,
+          NbtFloat.class, NbtInt.class, NbtIntArray.class, NbtList.class, NbtLong.class, NbtLongArray.class,
+          NbtNumeric.class, NbtShort.class, NbtString.class
+      };
+      for (Class<?> loadedClass : classes) {
+        loadedClass.getName();
+      }
+      loaded = true;
     }
   }
 
@@ -67,7 +79,24 @@ public class CallSiteNbt {
     JarFile pluginJar = (JarFile) jarField.get(classLoader);
     jarField.set(classLoader, new DelegateJarFile(pluginFile, pluginJar));
 
+    lookup = provideLookup();
     transformRemapper = new TransformRemapper(new RefOnlyClassLoader(classLoader, pluginJar));
+  }
+
+  private static <T extends Throwable> MethodHandles.Lookup provideLookup() throws T {
+    try {
+      Field theUnsafeField = Unsafe.class.getDeclaredField("theUnsafe");
+      theUnsafeField.setAccessible(true);
+      Unsafe unsafe = (Unsafe) theUnsafeField.get(null);
+
+      Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+      return (MethodHandles.Lookup) unsafe.getObject(
+          unsafe.staticFieldBase(implLookupField),
+          unsafe.staticFieldOffset(implLookupField)
+      );
+    } catch (Throwable e) {
+      throw (T) e;
+    }
   }
 
   private static byte[] transformBaseClass(byte[] input) {
@@ -131,7 +160,7 @@ public class CallSiteNbt {
         return Type.getType(remappedDescriptor.toString());
       case Type.OBJECT:
         String matchedPrefix, internalName = type.getInternalName();
-        if(internalName.startsWith("org/bukkit/craftbukkit/")){
+        if (internalName.startsWith("org/bukkit/craftbukkit/")) {
           matchedPrefix = "org/bukkit/craftbukkit/";
         } else if (!CbVersion.v1_17_R1.isSupport() && internalName.startsWith("net/minecraft/server/")) {
           matchedPrefix = "net/minecraft/server/";
@@ -149,6 +178,40 @@ public class CallSiteNbt {
         return Type.getMethodType(parseType(methodType.getReturnType()), newArgumentTypes);
       default:
         return type;
+    }
+  }
+
+  private static Class<?> typeToClass(ClassLoader classLoader, Type type) throws ClassNotFoundException {
+    switch (type.getSort()) {
+      case Type.VOID:
+        return void.class;
+      case Type.BOOLEAN:
+        return boolean.class;
+      case Type.CHAR:
+        return char.class;
+      case Type.BYTE:
+        return byte.class;
+      case Type.SHORT:
+        return short.class;
+      case Type.INT:
+        return int.class;
+      case Type.FLOAT:
+        return float.class;
+      case Type.LONG:
+        return long.class;
+      case Type.DOUBLE:
+        return double.class;
+      case Type.ARRAY: {
+        Class<?> currentClass = Class.forName(type.getElementType().getClassName(), false, classLoader);
+        for (int i = 0; i < type.getDimensions(); i++) {
+          currentClass = Array.newInstance(currentClass, 0).getClass();
+        }
+        return currentClass;
+      }
+      case Type.OBJECT:
+        return Class.forName(type.getClassName(), false, classLoader);
+      default:
+        throw new IllegalArgumentException("Unsupported class type: " + type);
     }
   }
 
@@ -332,7 +395,7 @@ public class CallSiteNbt {
         return name;
       }
       HandleBy handleBy = fetchMethod(owner, name, descriptor);
-      if(handleBy == null || handleBy.reference().isEmpty()){
+      if (handleBy == null || handleBy.reference().isEmpty()) {
         return name;
       }
       String[] reference = parseMethod(handleBy.reference());
@@ -345,7 +408,7 @@ public class CallSiteNbt {
         return name;
       }
       HandleBy handleBy = fetchField(owner, name, descriptor);
-      if(handleBy == null || handleBy.reference().isEmpty()){
+      if (handleBy == null || handleBy.reference().isEmpty()) {
         return name;
       }
       String[] reference = parseField(handleBy.reference());
@@ -358,7 +421,7 @@ public class CallSiteNbt {
         return internalName;
       }
       HandleBy handleBy = fetchClass(internalName);
-      if(handleBy == null || handleBy.reference().isEmpty()){
+      if (handleBy == null || handleBy.reference().isEmpty()) {
         return internalName;
       }
       return parseClass(handleBy.reference());
@@ -399,8 +462,8 @@ public class CallSiteNbt {
         return;
       }
       HandleBy handleBy = remapper.fetchField(owner, name, descriptor);
-      if(handleBy == null || handleBy.reference().isEmpty()){
-        visitThrow("field L" + owner + ";" +  name + ":" + descriptor + " not available in this minecraft version");
+      if (handleBy == null || handleBy.reference().isEmpty()) {
+        visitThrow("field L" + owner + ";" + name + ":" + descriptor + " not available in this minecraft version");
         super.visitFieldInsn(opcode, owner, name, descriptor);
         return;
       }
@@ -418,8 +481,8 @@ public class CallSiteNbt {
       int opcode = opcodeAndSource & ~Opcodes.SOURCE_MASK;
 
       HandleBy handleBy = remapper.fetchMethod(owner, name, descriptor);
-      if(handleBy == null || handleBy.reference().isEmpty()){
-        visitThrow("method L" + owner + ";" +  name + descriptor + " not available in this minecraft version");
+      if (handleBy == null || handleBy.reference().isEmpty()) {
+        visitThrow("method L" + owner + ";" + name + descriptor + " not available in this minecraft version");
         super.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
         return;
       }
@@ -427,11 +490,62 @@ public class CallSiteNbt {
         opcode = Opcodes.INVOKEINTERFACE;
       }
       String[] reference = parseMethod(handleBy.reference());
-      super.visitMethodInsn(opcode | source, reference[0], reference[1], reference[2], handleBy.isInterface());
+      if (handleBy.accessor()) {
+        super.visitInvokeDynamicInsn(
+            reference[1],
+            (opcode == Opcodes.INVOKESTATIC) ? descriptor : ("(L" + owner + ";" + descriptor.substring(1)),
+            new Handle(
+                Opcodes.H_INVOKESTATIC,
+                "bot/inker/bukkit/nbt/loader/CallSiteNbt$Spy",
+                "bootstrap",
+                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;",
+                false),
+            opcode,
+            reference[0],
+            reference[2]
+        );
+      } else {
+        super.visitMethodInsn(opcode | source, reference[0], reference[1], reference[2], handleBy.isInterface());
+      }
     }
   }
+
   public static class Spy {
-    public static void throwException(String message){
+    public static CallSite bootstrap(
+        MethodHandles.Lookup callerLookup,
+        String name,
+        MethodType type,
+        int opcode,
+        String owner,
+        String describe
+    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException {
+      Class<?> caller = callerLookup.lookupClass();
+      ClassLoader classLoader = caller.getClassLoader();
+      Class<?> ownerClass = Class.forName(owner.replace('/', '.'), false, classLoader);
+      Type targetType = Type.getMethodType(describe);
+      Type[] targetArgumentTypes = targetType.getArgumentTypes();
+      Class<?>[] targetArgumentClasses = new Class[targetArgumentTypes.length];
+      for (int i = 0; i < targetArgumentTypes.length; i++) {
+        targetArgumentClasses[i] = typeToClass(classLoader, targetArgumentTypes[i]);
+      }
+      MethodType targetMethodType = MethodType.methodType(
+          typeToClass(classLoader, targetType.getReturnType()),
+          targetArgumentClasses
+      );
+      MethodHandle handle;
+      if (opcode == Opcodes.INVOKESTATIC) {
+        handle = lookup.findStatic(ownerClass, name, targetMethodType).asType(type);
+      } else if (opcode == Opcodes.INVOKESPECIAL) {
+        handle = lookup.findSpecial(ownerClass, name, targetMethodType, caller).asType(type);
+      } else if (opcode == Opcodes.INVOKEVIRTUAL || opcode == Opcodes.INVOKEINTERFACE) {
+        handle = lookup.findVirtual(ownerClass, name, targetMethodType).asType(type);
+      } else {
+        throw new IllegalStateException("Unsupported invokeMethod opcode: " + opcode);
+      }
+      return new ConstantCallSite(handle);
+    }
+
+    public static void throwException(String message) {
       throw new IllegalStateException(message);
     }
   }

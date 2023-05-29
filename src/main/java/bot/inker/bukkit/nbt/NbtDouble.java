@@ -15,8 +15,12 @@ public final class NbtDouble extends NbtNumeric<RefNbtTagDouble> {
 
   public static NbtDouble valueOf(double value) {
     return value == 0.0 ? ZERO : new NbtDouble(OF_SUPPORTED
-        ? RefNbtTagDouble.of(0.0)
-        : new RefNbtTagDouble(0.0));
+        ? RefNbtTagDouble.of(value)
+        : new RefNbtTagDouble(value));
+  }
+
+  static NbtDouble fromNmsImpl(RefNbtTagDouble delegate) {
+    return delegate.asDouble() == 0.0 ? ZERO : new NbtDouble(delegate);
   }
 
   @Override

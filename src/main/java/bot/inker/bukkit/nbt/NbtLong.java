@@ -25,8 +25,13 @@ public final class NbtLong extends NbtNumeric<RefNbtTagLong> {
     return (value >= -128 && value <= 1024)
         ? instanceCache[(int) value + 128]
         : new NbtLong(OF_SUPPORTED
-            ? RefNbtTagLong.of(value)
-            : new RefNbtTagLong(value));
+        ? RefNbtTagLong.of(value)
+        : new RefNbtTagLong(value));
+  }
+
+  static NbtLong fromNmsImpl(RefNbtTagLong delegate) {
+    long value = delegate.asLong();
+    return (value >= -128 && value <= 1024) ? instanceCache[(int) value + 128] : new NbtLong(delegate);
   }
 
   @Override

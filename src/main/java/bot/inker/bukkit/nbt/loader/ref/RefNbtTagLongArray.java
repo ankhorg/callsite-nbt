@@ -5,7 +5,7 @@ import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 
 import java.util.List;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/s")
+@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/NBTTagLongArray")
 public final class RefNbtTagLongArray extends RefNbtBase {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagLongArray;<init>([J)V")
   public RefNbtTagLongArray(long[] value) {

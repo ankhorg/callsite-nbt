@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class NbtCompound extends Nbt<RefNbtTagCompound> {
+public final class NbtCompound extends Nbt<RefNbtTagCompound> {
   private static final boolean SET_RETURN_SUPPORT = CbVersion.v1_16_R3.isSupport();
   private static final boolean LONG_ARRAY_SUPPORT = CbVersion.v1_16_R3.isSupport();
   private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_19_R3.isSupport();
@@ -88,14 +88,14 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> {
 
   public void putByteArray(String key, List<Byte> value) {
     if (PUT_BYTE_LIST_SUPPORT) {
+      delegate.setByteArray(key, value);
+    } else {
       byte[] bytes = new byte[value.size()];
       for (int i = 0; i < value.size(); i++) {
         Byte element = value.get(i);
         bytes[i] = (element == null) ? 0 : element;
       }
       delegate.setByteArray(key, bytes);
-    } else {
-      delegate.setByteArray(key, value);
     }
   }
 
@@ -201,7 +201,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> {
       return delegate.getLongArray(key);
     } else {
       if (delegate.hasKeyOfType(key, 12)) {
-        return ((RefNbtTagLongArray) delegate.get(key)).getLongs();
+        return ((NbtLongArray) (Object) this.get(key)).getAsLongArray();
       } else {
         return EMPTY_LONG_ARRAY;
       }

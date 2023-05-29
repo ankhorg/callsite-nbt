@@ -9,7 +9,7 @@ public final class NbtEnd extends Nbt<RefNbtTagEnd> {
 
   public static final NbtEnd INSTANCE = INSTANCE_FIELD_SUPPORT
       ? new NbtEnd(RefNbtTagEnd.INSTANCE)
-      : new NbtEnd((RefNbtTagEnd) RefNbtBase.createTag(0));
+      : new NbtEnd((RefNbtTagEnd) RefNbtBase.createTag((byte) 0));
 
   private NbtEnd(RefNbtTagEnd delegate) {
     super(delegate);

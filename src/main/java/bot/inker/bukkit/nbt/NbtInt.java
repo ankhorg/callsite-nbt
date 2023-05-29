@@ -25,8 +25,13 @@ public final class NbtInt extends NbtNumeric<RefNbtTagInt> {
     return (value >= -128 && value <= 1024)
         ? instanceCache[value + 128]
         : new NbtInt(OF_SUPPORTED
-            ? RefNbtTagInt.of(value)
-            : new RefNbtTagInt(value));
+        ? RefNbtTagInt.of(value)
+        : new RefNbtTagInt(value));
+  }
+
+  static NbtInt fromNmsImpl(RefNbtTagInt delegate) {
+    int value = delegate.asInt();
+    return (value >= -128 && value <= 1024) ? instanceCache[value + 128] : new NbtInt(delegate);
   }
 
   @Override

@@ -16,12 +16,12 @@ public enum CbVersion {
   }
 
   public static HandleBy match(HandleBy[] handles) {
-    if (handles.length == 0) {
+    if (handles == null || handles.length == 0) {
       return null;
     }
     HandleBy currentHandle = null;
     for (HandleBy handle : handles) {
-      if (handle.version().ordinal() > CURRENT.ordinal()) {
+      if (handle == null || handle.version().ordinal() > CURRENT.ordinal()) {
         continue;
       }
       if (currentHandle == null || handle.version().ordinal() > currentHandle.version().ordinal()) {

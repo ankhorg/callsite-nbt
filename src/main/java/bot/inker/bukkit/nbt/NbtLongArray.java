@@ -10,16 +10,6 @@ public final class NbtLongArray extends Nbt<RefNbtTagLongArray> {
   private static final boolean ACCESS_ARRAY_SUPPORT = CbVersion.v1_16_R3.isSupport();
   private static final Field accessField = ACCESS_ARRAY_SUPPORT ? null : provideAccessField();
 
-  private static Field provideAccessField() {
-    for (Field field : RefNbtTagLongArray.class.getDeclaredFields()) {
-      if (field.getType() == long[].class) {
-        field.setAccessible(true);
-        return field;
-      }
-    }
-    throw new IllegalStateException("No direct access field found in " + RefNbtTagLongArray.class);
-  }
-
   NbtLongArray(RefNbtTagLongArray delegate) {
     super(delegate);
   }
@@ -32,10 +22,20 @@ public final class NbtLongArray extends Nbt<RefNbtTagLongArray> {
     super(new RefNbtTagLongArray(value));
   }
 
+  private static Field provideAccessField() {
+    for (Field field : RefNbtTagLongArray.class.getDeclaredFields()) {
+      if (field.getType() == long[].class) {
+        field.setAccessible(true);
+        return field;
+      }
+    }
+    throw new IllegalStateException("No direct access field found in " + RefNbtTagLongArray.class);
+  }
+
   public long[] getAsLongArray() {
-    if(ACCESS_ARRAY_SUPPORT) {
+    if (ACCESS_ARRAY_SUPPORT) {
       return delegate.getLongs();
-    }else{
+    } else {
       try {
         return (long[]) accessField.get(delegate);
       } catch (IllegalAccessException e) {

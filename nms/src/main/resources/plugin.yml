@@ -1,6 +1,5 @@
-name: callsite-nbt
+name: callsite-nbt-test
 version: 1.0-SNAPSHOT
-api-version: 1.13
 main: bot.inker.bukkit.nbt.loader.CallsiteNbtPlugin
 load: STARTUP
 authors:

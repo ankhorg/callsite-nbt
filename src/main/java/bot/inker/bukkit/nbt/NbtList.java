@@ -154,7 +154,7 @@ public final class NbtList extends Nbt<RefNbtTagList> implements List<Nbt<?>> {
     @Override
     public Nbt<?> get(int index) {
       RefNbtBase result = delegate.get(index);
-      if(THROW_INDEX_SUPPORT && result instanceof RefNbtTagEnd && (index < 0 || index >= delegate.size())){
+      if (THROW_INDEX_SUPPORT && result instanceof RefNbtTagEnd && (index < 0 || index >= delegate.size())) {
         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + delegate.size());
       }
       return nms2nbt(result);
@@ -169,27 +169,27 @@ public final class NbtList extends Nbt<RefNbtTagList> implements List<Nbt<?>> {
     public Nbt<?> set(int index, Nbt<?> element) {
       if (RETURN_SET_SUPPORT) {
         return nms2nbt(delegate.set1(index, nbt2nms(element)));
-      }else if(index >= 0 && index < delegate.size()){
+      } else if (index >= 0 && index < delegate.size()) {
         Nbt<?> previous = nms2nbt(delegate.get(index));
         delegate.set0(index, nbt2nms(element));
         return previous;
-      }else{
+      } else {
         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + delegate.size());
       }
     }
 
     @Override
     public void add(int index, Nbt<?> element) {
-      if(INDEX_ADD_SUPPORT) {
+      if (INDEX_ADD_SUPPORT) {
         delegate.add1(index, nbt2nms(element));
-      }else{
+      } else {
         int addedIndex = delegate.size();
-        if(index > addedIndex){
+        if (index > addedIndex) {
           throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + delegate.size());
         }
         RefNbtBase nms = nbt2nms(element);
         delegate.add0(nms);
-        if(index == addedIndex){
+        if (index == addedIndex) {
           return;
         }
         if (RETURN_SET_SUPPORT) {
@@ -197,7 +197,7 @@ public final class NbtList extends Nbt<RefNbtTagList> implements List<Nbt<?>> {
             nms = delegate.set1(i, nms);
           }
           delegate.set1(addedIndex, nms);
-        }else{
+        } else {
           for (int i = index; i < addedIndex; i++) {
             RefNbtBase oldValue = delegate.get(i);
             delegate.set0(i, nms);

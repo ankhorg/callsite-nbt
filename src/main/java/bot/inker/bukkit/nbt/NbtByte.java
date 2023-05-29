@@ -27,6 +27,10 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> {
     return instanceCache[value + 128];
   }
 
+  static NbtByte fromNmsImpl(RefNbtTagByte delegate) {
+    return instanceCache[delegate.asByte() + 128];
+  }
+
   public static NbtByte valueOf(boolean value) {
     return value ? trueInstance : falseInstance;
   }

@@ -11,6 +11,6 @@ public final class RefNbtTagShort extends RefNbtNumber {
     throw new UnsupportedOperationException();
   }
 
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagLong;a(J)Lnet/minecraft/server/v1_16_R3/NBTTagLong;")
+  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagShort;a(S)Lnet/minecraft/server/v1_16_R3/NBTTagShort;")
   public static native RefNbtTagShort of(short value);
 }

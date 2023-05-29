@@ -12,6 +12,8 @@ public @interface HandleBy {
 
   boolean isInterface() default false;
 
+  boolean accessor() default false;
+
   boolean remap() default false;
 
 

@@ -25,8 +25,13 @@ public final class NbtShort extends NbtNumeric<RefNbtTagShort> {
     return (value >= -128 && value <= 1024)
         ? instanceCache[value + 128]
         : new NbtShort(OF_SUPPORTED
-            ? RefNbtTagShort.of(value)
-            : new RefNbtTagShort(value));
+        ? RefNbtTagShort.of(value)
+        : new RefNbtTagShort(value));
+  }
+
+  static NbtShort fromNmsImpl(RefNbtTagShort delegate) {
+    short value = delegate.asShort();
+    return (value >= -128 && value <= 1024) ? instanceCache[value + 128] : new NbtShort(delegate);
   }
 
   @Override

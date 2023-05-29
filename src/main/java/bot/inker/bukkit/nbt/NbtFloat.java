@@ -20,6 +20,10 @@ public final class NbtFloat extends NbtNumeric<RefNbtTagFloat> {
         : new RefNbtTagFloat(value));
   }
 
+  static NbtFloat fromNmsImpl(RefNbtTagFloat delegate) {
+    return delegate.asFloat() == 0.0F ? ZERO : new NbtFloat(delegate);
+  }
+
   @Override
   public NbtFloat clone() {
     return this;

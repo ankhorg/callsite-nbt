@@ -84,7 +84,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getShort(Ljava/lang/String;)S")
   public native short getShort(String key);
 
-  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getInt(Ljava/lang/String;)S")
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getInt(Ljava/lang/String;)I")
   public native int getInt(String key);
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getLong(Ljava/lang/String;)J")
