@@ -8,9 +8,10 @@ import bot.inker.bukkit.nbt.loader.ref.RefNbtTagList;
 import java.util.*;
 
 public final class NbtList extends Nbt<RefNbtTagList> implements List<Nbt<?>> {
-  private static boolean THROW_INDEX_SUPPORT = CbVersion.v1_16_R3.isSupport();
-  private static boolean RETURN_SET_SUPPORT = CbVersion.v1_16_R3.isSupport();
-  private static boolean INDEX_ADD_SUPPORT = CbVersion.v1_16_R3.isSupport();
+  private final static boolean THROW_INDEX_SUPPORT = CbVersion.v1_13_R2.isSupport();
+  private final static boolean RETURN_SET_SUPPORT = CbVersion.v1_16_R3.isSupport();
+  private final static boolean BOOLEAN_ADD_SUPPORT = CbVersion.v1_13_R2.isSupport();
+  private final static boolean INDEX_ADD_SUPPORT = CbVersion.v1_16_R3.isSupport();
 
   private final SimpleAbstractList list = new SimpleAbstractList();
 
@@ -181,14 +182,18 @@ public final class NbtList extends Nbt<RefNbtTagList> implements List<Nbt<?>> {
     @Override
     public void add(int index, Nbt<?> element) {
       if (INDEX_ADD_SUPPORT) {
-        delegate.add1(index, nbt2nms(element));
+        delegate.add2(index, nbt2nms(element));
       } else {
         int addedIndex = delegate.size();
         if (index > addedIndex) {
           throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + delegate.size());
         }
         RefNbtBase nms = nbt2nms(element);
-        delegate.add0(nms);
+        if(BOOLEAN_ADD_SUPPORT){
+          delegate.add1(nms);
+        }else {
+          delegate.add0(nms);
+        }
         if (index == addedIndex) {
           return;
         }

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 public enum CbVersion {
   ALL,
   v1_12_R1,
+  v1_13_R2,
   v1_16_R3,
   v1_17_R1,
   v1_19_R3;

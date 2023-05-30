@@ -33,8 +33,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setLong(Ljava/lang/String;J)V")
   public native void setLong(String key, long value);
 
-  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setUUID(Ljava/lang/String;Ljava/util/UUID;)V")
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagCompound;a(Ljava/lang/String;Ljava/util/UUID;)V")
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;a(Ljava/lang/String;Ljava/util/UUID;)V")
   public native void setUUID(String key, UUID uuid);
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setFloat(Ljava/lang/String;F)V")
@@ -54,13 +53,13 @@ public final class RefNbtTagCompound extends RefNbtBase {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setIntArray(Ljava/lang/String;[I)V")
   public native void setIntArray(String key, int[] value);
 
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagCompound;b(Ljava/lang/String;Ljava/util/List;)V")
+  @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagCompound;b(Ljava/lang/String;Ljava/util/List;)V")
   public native void setIntArray(String key, List<Integer> value);
 
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagCompound;a(Ljava/lang/String;[J)V")
+  @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagCompound;a(Ljava/lang/String;[J)V")
   public native void setLongArray(String key, long[] value);
 
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagCompound;c(Ljava/lang/String;Ljava/util/List;)V")
+  @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagCompound;c(Ljava/lang/String;Ljava/util/List;)V")
   public native void setLongArray(String key, List<Long> value);
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setBoolean(Ljava/lang/String;Z)V")
@@ -90,8 +89,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getLong(Ljava/lang/String;)J")
   public native long getLong(String key);
 
-  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getUUID(Ljava/lang/String;)Ljava/util/UUID;")
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagCompound;a(Ljava/lang/String;)Ljava/util/UUID;")
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;a(Ljava/lang/String;)Ljava/util/UUID;")
   public native UUID getUUID(String key);
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getFloat(Ljava/lang/String;)F")
@@ -109,6 +107,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getIntArray(Ljava/lang/String;)[I")
   public native int[] getIntArray(String key);
 
+  @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagCompound;o(Ljava/lang/String;)[J")
   @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagCompound;getLongArray(Ljava/lang/String;)[J")
   public native long[] getLongArray(String key);
 
@@ -122,7 +121,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
   public native boolean getBoolean(String key);
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;c()Ljava/util/Set;")
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagCompound;getKeys()Ljava/util/Set;")
+  @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagCompound;getKeys()Ljava/util/Set;")
   public native Set<String> getKeys();
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;d()I")

@@ -486,7 +486,7 @@ public class CallSiteNbt {
         super.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
         return;
       }
-      if (handleBy.isInterface()) {
+      if (handleBy.isInterface() && opcode != Opcodes.INVOKESTATIC) {
         opcode = Opcodes.INVOKEINTERFACE;
       }
       String[] reference = parseMethod(handleBy.reference());

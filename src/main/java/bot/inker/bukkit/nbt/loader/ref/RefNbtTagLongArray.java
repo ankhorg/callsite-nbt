@@ -17,6 +17,7 @@ public final class RefNbtTagLongArray extends RefNbtBase {
     throw new UnsupportedOperationException();
   }
 
+  @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagLongArray;d()[J")
   @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagLongArray;getLongs()[J")
   public native long[] getLongs();
 }

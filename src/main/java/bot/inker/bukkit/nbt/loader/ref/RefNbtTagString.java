@@ -14,6 +14,6 @@ public final class RefNbtTagString extends RefNbtBase {
   public native static RefNbtTagString of(String value);
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagString;c_()Ljava/lang/String;")
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagString;asString()Ljava/lang/String;")
+  @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagString;asString()Ljava/lang/String;")
   public native String asString();
 }
