@@ -4,7 +4,7 @@ import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import bot.inker.bukkit.nbt.loader.ref.RefNbtTagInt;
 
 public final class NbtInt extends NbtNumeric<RefNbtTagInt> {
-  private static final boolean OF_SUPPORTED = CbVersion.v1_16_R3.isSupport();
+  private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtInt[] instanceCache = buildInstanceCache();
 
   NbtInt(RefNbtTagInt delegate) {

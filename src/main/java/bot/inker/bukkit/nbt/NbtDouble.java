@@ -4,7 +4,7 @@ import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import bot.inker.bukkit.nbt.loader.ref.RefNbtTagDouble;
 
 public final class NbtDouble extends NbtNumeric<RefNbtTagDouble> {
-  private static final boolean OF_SUPPORTED = CbVersion.v1_16_R3.isSupport();
+  private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtDouble ZERO = new NbtDouble(OF_SUPPORTED
       ? RefNbtTagDouble.of(0.0)
       : new RefNbtTagDouble(0.0));

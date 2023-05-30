@@ -18,6 +18,6 @@ public final class RefNbtTagIntArray extends RefNbtBase {
   }
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagIntArray;d()[I")
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagIntArray;getInts()[I")
+  @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/NBTTagIntArray;getInts()[I")
   public native int[] getInts();
 }

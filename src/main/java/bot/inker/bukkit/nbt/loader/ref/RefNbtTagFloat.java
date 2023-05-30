@@ -11,6 +11,6 @@ public final class RefNbtTagFloat extends RefNbtNumber {
     throw new UnsupportedOperationException();
   }
 
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagFloat;a(F)Lnet/minecraft/server/v1_16_R3/NBTTagFloat;")
+  @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/NBTTagFloat;a(F)Lnet/minecraft/server/v1_15_R1/NBTTagFloat;")
   public static native RefNbtTagFloat of(float value);
 }

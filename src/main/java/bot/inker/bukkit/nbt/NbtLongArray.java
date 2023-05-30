@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public final class NbtLongArray extends Nbt<RefNbtTagLongArray> {
-  private static final boolean ACCESS_ARRAY_SUPPORT = CbVersion.v1_16_R3.isSupport();
+  private static final boolean ACCESS_ARRAY_SUPPORT = CbVersion.v1_13_R2.isSupport();
   private static final Field accessField = ACCESS_ARRAY_SUPPORT ? null : provideAccessField();
 
   NbtLongArray(RefNbtTagLongArray delegate) {

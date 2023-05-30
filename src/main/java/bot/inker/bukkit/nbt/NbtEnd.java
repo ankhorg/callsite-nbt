@@ -5,7 +5,7 @@ import bot.inker.bukkit.nbt.loader.ref.RefNbtBase;
 import bot.inker.bukkit.nbt.loader.ref.RefNbtTagEnd;
 
 public final class NbtEnd extends Nbt<RefNbtTagEnd> {
-  private static final boolean INSTANCE_FIELD_SUPPORT = CbVersion.v1_16_R3.isSupport();
+  private static final boolean INSTANCE_FIELD_SUPPORT = CbVersion.v1_15_R1.isSupport();
 
   public static final NbtEnd INSTANCE = INSTANCE_FIELD_SUPPORT
       ? new NbtEnd(RefNbtTagEnd.INSTANCE)

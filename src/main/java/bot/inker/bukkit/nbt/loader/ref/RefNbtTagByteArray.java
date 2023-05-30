@@ -18,6 +18,6 @@ public final class RefNbtTagByteArray extends RefNbtBase {
   }
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagByteArray;c()[B")
-  @HandleBy(version = CbVersion.v1_16_R3, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagByteArray;getBytes()[B")
+  @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_16_R3/NBTTagByteArray;getBytes()[B")
   public native byte[] getBytes();
 }

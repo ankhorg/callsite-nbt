@@ -9,9 +9,9 @@ import java.util.*;
 
 public final class NbtList extends Nbt<RefNbtTagList> implements List<Nbt<?>> {
   private final static boolean THROW_INDEX_SUPPORT = CbVersion.v1_13_R2.isSupport();
-  private final static boolean RETURN_SET_SUPPORT = CbVersion.v1_16_R3.isSupport();
+  private final static boolean RETURN_SET_SUPPORT = CbVersion.v1_13_R2.isSupport();
   private final static boolean BOOLEAN_ADD_SUPPORT = CbVersion.v1_13_R2.isSupport();
-  private final static boolean INDEX_ADD_SUPPORT = CbVersion.v1_16_R3.isSupport();
+  private final static boolean INDEX_ADD_SUPPORT = CbVersion.v1_14_R1.isSupport();
 
   private final SimpleAbstractList list = new SimpleAbstractList();
 
@@ -189,9 +189,9 @@ public final class NbtList extends Nbt<RefNbtTagList> implements List<Nbt<?>> {
           throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + delegate.size());
         }
         RefNbtBase nms = nbt2nms(element);
-        if(BOOLEAN_ADD_SUPPORT){
+        if (BOOLEAN_ADD_SUPPORT) {
           delegate.add1(nms);
-        }else {
+        } else {
           delegate.add0(nms);
         }
         if (index == addedIndex) {
