@@ -4,6 +4,7 @@ import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/NBTTagDouble")
+@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/nbt/DoubleTag", remap = true)
 public final class RefNbtTagDouble extends RefNbtNumber {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagDouble;<init>(D)V")
   @HandleBy(version = CbVersion.v1_15_R1, reference = "")
@@ -12,5 +13,6 @@ public final class RefNbtTagDouble extends RefNbtNumber {
   }
 
   @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/NBTTagDouble;a(D)Lnet/minecraft/server/v1_15_R1/NBTTagDouble;")
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/DoubleTag;valueOf(D)Lnet/minecraft/nbt/DoubleTag;", remap = true)
   public static native RefNbtTagDouble of(double value);
 }

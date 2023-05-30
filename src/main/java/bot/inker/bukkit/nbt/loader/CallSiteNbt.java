@@ -3,6 +3,7 @@ package bot.inker.bukkit.nbt.loader;
 import bot.inker.bukkit.nbt.*;
 import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
+import com.google.common.collect.ImmutableMap;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.*;
 import org.objectweb.asm.commons.ClassRemapper;
@@ -13,14 +14,16 @@ import sun.misc.Unsafe;
 import java.io.*;
 import java.lang.invoke.*;
 import java.lang.reflect.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.stream.Stream;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 
 public class CallSiteNbt {
@@ -34,6 +37,7 @@ public class CallSiteNbt {
   private static boolean loaded = false;
   private static MethodHandles.Lookup lookup;
   private static TransformRemapper transformRemapper;
+  private static Map<String, String> remapping;
 
   static {
     CSN_PACKAGE = "bot.inker.bukkit.nbt.".replace('.', '.');
@@ -79,11 +83,44 @@ public class CallSiteNbt {
     JarFile pluginJar = (JarFile) jarField.get(classLoader);
     jarField.set(classLoader, new DelegateJarFile(pluginFile, pluginJar));
 
-    lookup = provideLookup();
-    transformRemapper = new TransformRemapper(new RefOnlyClassLoader(classLoader, pluginJar));
+    CallSiteNbt.remapping = Collections.emptyMap();
+    // CallSiteNbt.remapping = provideRemapping();
+    CallSiteNbt.lookup = provideLookup();
+    CallSiteNbt.transformRemapper = new TransformRemapper(new RefOnlyClassLoader(classLoader, pluginJar));
   }
 
-  private static <T extends Throwable> MethodHandles.Lookup provideLookup() throws T {
+  private static <T extends Throwable> Map<String, String> provideRemapping() throws T{
+    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    try {
+      Field mappingField = ConstMappings.class.getDeclaredField(CbVersion.current().name());
+      String mappingContent = (String) mappingField.get(null);
+      try(DataInputStream in = new DataInputStream(new GZIPInputStream(Base64.getDecoder().wrap(new StringBufferInputStream(mappingContent))))) {
+        while (true) {
+          String sourceClass = readString(in);
+          if (sourceClass == null) {
+            break;
+          }
+          String targetClass = Objects.requireNonNull(readString(in));
+          builder.put(sourceClass, targetClass);
+          while (true){
+            String source = readString(in);
+            if(source == null){
+              break;
+            }
+            String target = Objects.requireNonNull(readString(in));
+            builder.put("L"+sourceClass+";" +source, "L"+targetClass+";"+target);
+          }
+        }
+      }
+    } catch (NoSuchFieldException e) {
+      //
+    } catch (IOException | IllegalAccessException e) {
+      throw (T) e;
+    }
+    return builder.build();
+  }
+
+  private static MethodHandles.Lookup provideLookup() {
     try {
       Field theUnsafeField = Unsafe.class.getDeclaredField("theUnsafe");
       theUnsafeField.setAccessible(true);
@@ -95,8 +132,18 @@ public class CallSiteNbt {
           unsafe.staticFieldOffset(implLookupField)
       );
     } catch (Throwable e) {
-      throw (T) e;
+      return null;
     }
+  }
+
+  private static String readString(DataInput in) throws IOException {
+    int size = in.readShort();
+    if(size == 0){
+      return null;
+    }
+    byte[] bytes = new byte[size];
+    in.readFully(bytes);
+    return new String(bytes, StandardCharsets.UTF_8);
   }
 
   private static byte[] transformBaseClass(byte[] input) {
@@ -118,6 +165,7 @@ public class CallSiteNbt {
   }
 
   private static String[] parseMethod(String reference) {
+    reference = remapping.getOrDefault(reference, reference);
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf('(', firstSplitIndex);
     String[] result = new String[3];
@@ -132,6 +180,7 @@ public class CallSiteNbt {
   }
 
   private static String[] parseField(String reference) {
+    reference = remapping.getOrDefault(reference, reference);
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf(':');
     String[] result = new String[3];
@@ -146,6 +195,7 @@ public class CallSiteNbt {
   }
 
   private static String parseClass(String reference) {
+    reference = remapping.getOrDefault(reference, reference);
     return parseType(Type.getObjectType(reference)).getInternalName();
   }
 
@@ -213,6 +263,10 @@ public class CallSiteNbt {
       default:
         throw new IllegalArgumentException("Unsupported class type: " + type);
     }
+  }
+
+  private static class ConstMappings {
+
   }
 
   private static class DelegateJarFile extends JarFile {
@@ -452,7 +506,8 @@ public class CallSiteNbt {
 
     private void visitThrow(String message) {
       super.visitLdcInsn(message);
-      super.visitMethodInsn(Opcodes.INVOKESTATIC, "bot/inker/bukkit/nbt/loader/CallSiteNbt$Spy", "throwException", "(Ljava/lang/String;)V", false);
+      super.visitMethodInsn(Opcodes.INVOKESTATIC, Type.getInternalName(Spy.class), "throwException", "(Ljava/lang/String;)Ljava/lang/Object;", false);
+      super.visitInsn(Opcodes.POP);
     }
 
     @Override
@@ -545,7 +600,7 @@ public class CallSiteNbt {
       return new ConstantCallSite(handle);
     }
 
-    public static void throwException(String message) {
+    public static <T> T throwException(String message) {
       throw new IllegalStateException(message);
     }
   }

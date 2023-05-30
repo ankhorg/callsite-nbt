@@ -4,6 +4,7 @@ import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
 import bot.inker.bukkit.nbt.loader.annotation.HandleBy;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/NBTTagString")
+@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/nbt/StringTag", remap = true)
 public final class RefNbtTagString extends RefNbtBase {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagString;<init>(Ljava/lang/String;)V")
   @HandleBy(version = CbVersion.v1_15_R1, reference = "")
@@ -12,9 +13,11 @@ public final class RefNbtTagString extends RefNbtBase {
   }
 
   @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/NBTTagString;a(Ljava/lang/String;)Lnet/minecraft/server/v1_15_R1/NBTTagString;")
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/StringTag;valueOf(Ljava/lang/String;)Lnet/minecraft/nbt/StringTag;", remap = true)
   public native static RefNbtTagString of(String value);
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagString;c_()Ljava/lang/String;")
   @HandleBy(version = CbVersion.v1_13_R2, reference = "Lnet/minecraft/server/v1_13_R2/NBTTagString;asString()Ljava/lang/String;")
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/StringTag;getAsString()Ljava/lang/String;", remap = true)
   public native String asString();
 }

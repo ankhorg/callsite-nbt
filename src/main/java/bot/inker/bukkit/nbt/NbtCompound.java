@@ -12,7 +12,7 @@ import java.util.UUID;
 public final class NbtCompound extends Nbt<RefNbtTagCompound> {
   private static final boolean SET_RETURN_SUPPORT = CbVersion.v1_14_R1.isSupport();
   private static final boolean LONG_ARRAY_SUPPORT = CbVersion.v1_13_R2.isSupport();
-  private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_19_R3.isSupport();
+  private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_17_R1.isSupport();
   private static final boolean PUT_INT_LIST_SUPPORT = CbVersion.v1_13_R2.isSupport();
   private static final long[] EMPTY_LONG_ARRAY = new long[0];
 
