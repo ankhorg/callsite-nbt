@@ -9,11 +9,12 @@ repositories {
 }
 
 dependencies {
-  implementation(project(":", configuration = "shadow"))
+  implementation(rootProject.tasks["proguardJar"].outputs.files)
   compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 }
 
 tasks.shadowJar {
+  dependsOn(project(":").tasks["proguardJar"])
   // relocate("bot.inker.bukkit.nbt", "bot.inker.bukkit.test.libs.nbt")
 }
 

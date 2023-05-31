@@ -1,7 +1,7 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
-import bot.inker.bukkit.nbt.loader.ref.RefNbtTagInt;
+import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import bot.inker.bukkit.nbt.internal.ref.RefNbtTagInt;
 
 public final class NbtInt extends NbtNumeric<RefNbtTagInt> {
   private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();

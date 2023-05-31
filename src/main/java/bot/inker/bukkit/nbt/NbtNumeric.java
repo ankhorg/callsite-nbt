@@ -1,10 +1,10 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
-import bot.inker.bukkit.nbt.loader.ref.RefNbtNumber;
+import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import bot.inker.bukkit.nbt.internal.ref.RefNbtNumber;
 
 public abstract class NbtNumeric<NMS extends RefNbtNumber> extends Nbt<NMS> {
-  private static final boolean AS_NUMBER_SUPPORTED = CbVersion.v1_13_R2.isSupport();
+  private static final boolean AS_NUMBER_SUPPORTED = CbVersion.v1_13_R1.isSupport();
 
   NbtNumeric(NMS delegate) {
     super(delegate);

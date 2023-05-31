@@ -1,6 +1,5 @@
 package bot.inker.bukkit.test;
 
-import bot.inker.bukkit.nbt.*;
 import com.google.common.collect.ImmutableList;
 
 import java.util.Arrays;
@@ -201,10 +200,10 @@ public class TestTargets {
   }
 
   private void testNbtEnd() {
-    assert NbtEnd.INSTANCE == NbtEnd.INSTANCE.clone();
-    assert NbtEnd.INSTANCE.getId() == 0;
-    assert NbtEnd.INSTANCE.hashCode() == NbtEnd.INSTANCE.hashCode();
-    assert NbtEnd.INSTANCE.equals(NbtEnd.INSTANCE);
+    assert NbtEnd.instance() == NbtEnd.instance().clone();
+    assert NbtEnd.instance().getId() == 0;
+    assert NbtEnd.instance().hashCode() == NbtEnd.instance().hashCode();
+    assert NbtEnd.instance().equals(NbtEnd.instance());
   }
 
   private void testNbtFloat() {

@@ -1,12 +1,12 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.loader.CallSiteNbt;
-import bot.inker.bukkit.nbt.loader.ref.*;
+import bot.inker.bukkit.nbt.internal.loader.CallSiteInstaller;
+import bot.inker.bukkit.nbt.internal.ref.*;
 
 public abstract class Nbt<NMS extends RefNbtBase> {
   static {
     if (RefNbtBase.class.getName().equals("bot.inker.bukkit.nbt.loader.ref.RefNbtBase")) {
-      CallSiteNbt.Spy.throwException("CallSiteNbt loaded before CallSiteNbt installed, you should invoke CallSiteNbt#install before load it.");
+      CallSiteInstaller.Spy.throwException("CallSiteNbt loaded before CallSiteNbt installed, you should invoke CallSiteNbt#install before load it.");
     }
   }
 

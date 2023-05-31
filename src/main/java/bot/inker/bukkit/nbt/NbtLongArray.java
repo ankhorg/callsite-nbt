@@ -1,13 +1,13 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.loader.annotation.CbVersion;
-import bot.inker.bukkit.nbt.loader.ref.RefNbtTagLongArray;
+import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import bot.inker.bukkit.nbt.internal.ref.RefNbtTagLongArray;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
 public final class NbtLongArray extends Nbt<RefNbtTagLongArray> {
-  private static final boolean ACCESS_ARRAY_SUPPORT = CbVersion.v1_13_R2.isSupport();
+  private static final boolean ACCESS_ARRAY_SUPPORT = CbVersion.v1_13_R1.isSupport();
   private static final Field accessField = ACCESS_ARRAY_SUPPORT ? null : provideAccessField();
 
   NbtLongArray(RefNbtTagLongArray delegate) {

@@ -1,6 +1,6 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.loader.ref.RefNbtTagIntArray;
+import bot.inker.bukkit.nbt.internal.ref.RefNbtTagIntArray;
 
 import java.util.List;
 
