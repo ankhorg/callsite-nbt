@@ -92,6 +92,8 @@ tasks.create<ProGuardTask>("proguard") {
   libraryjars(configurations.compileClasspath)
   libraryjars("${System.getProperty("java.home")}/lib/rt.jar")
   libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
+  libraryjars("${System.getProperty("java.home")}/jmods/java.logging.jmod")
+  libraryjars("${System.getProperty("java.home")}/jmods/jdk.unsupported.jmod")
 }
 
 tasks.create<ShadowJar>("proguardJar") {
