@@ -81,4 +81,8 @@ public abstract class Nbt<NMS extends RefNbtBase> {
   protected NMS cloneNms() {
     return (NMS) delegate.rClone();
   }
+
+  public String getAsString() {
+    return delegate.asString();
+  }
 }

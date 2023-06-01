@@ -232,4 +232,171 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
   public NbtCompound clone() {
     return new NbtCompound(cloneNms());
   }
+
+  public Nbt<?> getDeepNbt(String key) {
+    String[] keys = key.split("\\.");
+
+    NbtCompound currentNbtCompound = this;
+    Nbt<?> value = null;
+
+    for (String k : keys) {
+      if (currentNbtCompound.contains(k)) {
+        Nbt<?> obj = currentNbtCompound.get(k);
+        if (obj instanceof NbtCompound) {
+          currentNbtCompound = (NbtCompound) obj;
+        } else {
+          value = obj;
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+
+    return value;
+  }
+
+  public byte getDeepByte(String key) {
+    return getDeepByte(key, (byte) 0);
+  }
+
+  public byte getDeepByte(String key, byte def) {
+    try {
+      if (contains(key, NbtType.TAG_ANY_NUMBER))
+        return ((NbtNumeric<?>) getDeepNbt(key)).getAsByte();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public short getDeepShort(String key) {
+    return getDeepShort(key, (short) 0);
+  }
+
+  public short getDeepShort(String key, short def) {
+    try {
+      if (contains(key, NbtType.TAG_ANY_NUMBER))
+        return ((NbtNumeric<?>) getDeepNbt(key)).getAsShort();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public int getDeepInt(String key) {
+    return getDeepInt(key, 0);
+  }
+
+  public int getDeepInt(String key, int def) {
+    try {
+      if (contains(key, NbtType.TAG_ANY_NUMBER))
+        return ((NbtNumeric<?>) getDeepNbt(key)).getAsInt();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public long getDeepLong(String key) {
+    return getDeepLong(key, 0);
+  }
+
+  public long getDeepLong(String key, long def) {
+    try {
+      if (contains(key, NbtType.TAG_ANY_NUMBER))
+        return ((NbtNumeric<?>) getDeepNbt(key)).getAsLong();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public float getDeepFloat(String key) {
+    return getDeepFloat(key, 0.0F);
+  }
+
+  public float getDeepFloat(String key, float def) {
+    try {
+      if (contains(key, NbtType.TAG_ANY_NUMBER))
+        return ((NbtNumeric<?>) getDeepNbt(key)).getAsFloat();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public double getDeepDouble(String key) {
+    return getDeepDouble(key, 0.0D);
+  }
+
+  public double getDeepDouble(String key, double def) {
+    try {
+      if (contains(key, NbtType.TAG_ANY_NUMBER))
+        return ((NbtNumeric<?>) getDeepNbt(key)).getAsDouble();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public String getDeepString(String key) {
+    return getDeepString(key, "");
+  }
+
+  public String getDeepString(String key, String def) {
+    try {
+      if (contains(key, NbtType.TAG_STRING))
+        return getDeepNbt(key).getAsString();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public byte[] getDeepByteArray(String key) {
+    return getDeepByteArray(key, new byte[0]);
+  }
+
+  public byte[] getDeepByteArray(String key, byte[] def) {
+    try {
+      if (contains(key, NbtType.TAG_BYTE_ARRAY))
+        return ((NbtByteArray) getDeepNbt(key)).getAsByteArray();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public int[] getDeepIntArray(String key) {
+    return getDeepIntArray(key, new int[0]);
+  }
+
+  public int[] getDeepIntArray(String key, int[] def) {
+    try {
+      if (contains(key, NbtType.TAG_INT_ARRAY))
+        return ((NbtIntArray) getDeepNbt(key)).getAsIntArray();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public long[] getDeepLongArray(String key) {
+    return getDeepLongArray(key, new long[0]);
+  }
+
+  public long[] getDeepLongArray(String key, long[] def) {
+    try {
+      if (contains(key, NbtType.TAG_LONG_ARRAY))
+        return ((NbtLongArray) getDeepNbt(key)).getAsLongArray();
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public NbtCompound getDeepCompound(String key) {
+    return getDeepCompound(key, new NbtCompound());
+  }
+
+  public NbtCompound getDeepCompound(String key, NbtCompound def) {
+    try {
+      if (contains(key, NbtType.TAG_COMPOUND))
+        return (NbtCompound) getDeepNbt(key);
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  public NbtList getDeepList(String key) {
+    return getDeepList(key, new NbtList());
+  }
+
+  public NbtList getDeepList(String key, NbtList def) {
+    try {
+      if (contains(key, NbtType.TAG_LIST))
+        return (NbtList) getDeepNbt(key);
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
 }
