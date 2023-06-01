@@ -59,6 +59,7 @@ public class TestTargets {
     assert NbtByte.valueOf(VALUE_A).equals(NbtByte.valueOf(VALUE_A));
     assert !NbtByte.valueOf(VALUE_A).equals(NbtByte.valueOf(VALUE_B));
     assert !NbtByte.valueOf(VALUE_A).toString().isEmpty();
+    assert !NbtByte.valueOf(VALUE_A).getAsString().isEmpty();
     assert NbtByte.valueOf(true) == NbtByte.valueOf((byte) 1);
     assert NbtByte.valueOf(VALUE_A).hashCode() == NbtByte.valueOf(VALUE_A).hashCode();
     ;
@@ -193,6 +194,7 @@ public class TestTargets {
     assert NbtDouble.valueOf(VALUE_A).equals(NbtDouble.valueOf(VALUE_A));
     assert !NbtDouble.valueOf(VALUE_A).equals(NbtDouble.valueOf(VALUE_B));
     assert !NbtDouble.valueOf(VALUE_A).toString().isEmpty();
+    assert !NbtDouble.valueOf(VALUE_A).getAsString().isEmpty();
     assert NbtDouble.valueOf(VALUE_A).hashCode() == NbtDouble.valueOf(VALUE_A).hashCode();
     ;
     assert NbtDouble.valueOf(VALUE_A).getId() == 6;
@@ -214,6 +216,7 @@ public class TestTargets {
     assert NbtFloat.valueOf(VALUE_A).equals(NbtFloat.valueOf(VALUE_A));
     assert !NbtFloat.valueOf(VALUE_A).equals(NbtFloat.valueOf(VALUE_B));
     assert !NbtFloat.valueOf(VALUE_A).toString().isEmpty();
+    assert !NbtFloat.valueOf(VALUE_A).getAsString().isEmpty();
     assert NbtFloat.valueOf(VALUE_A).hashCode() == NbtFloat.valueOf(VALUE_A).hashCode();
     ;
     assert NbtFloat.valueOf(VALUE_A).getId() == 5;
@@ -228,6 +231,7 @@ public class TestTargets {
     assert NbtInt.valueOf(VALUE_A).equals(NbtInt.valueOf(VALUE_A));
     assert !NbtInt.valueOf(VALUE_A).equals(NbtInt.valueOf(VALUE_B));
     assert !NbtInt.valueOf(VALUE_A).toString().isEmpty();
+    assert !NbtInt.valueOf(VALUE_A).getAsString().isEmpty();
     assert NbtInt.valueOf(VALUE_A).hashCode() == NbtInt.valueOf(VALUE_A).hashCode();
     ;
     assert NbtInt.valueOf(VALUE_A).getId() == 3;
@@ -297,6 +301,7 @@ public class TestTargets {
     assert NbtLong.valueOf(VALUE_A).equals(NbtLong.valueOf(VALUE_A));
     assert !NbtLong.valueOf(VALUE_A).equals(NbtLong.valueOf(VALUE_B));
     assert !NbtLong.valueOf(VALUE_A).toString().isEmpty();
+    assert !NbtLong.valueOf(VALUE_A).getAsString().isEmpty();
     assert NbtLong.valueOf(VALUE_A).hashCode() == NbtLong.valueOf(VALUE_A).hashCode();
     ;
     assert NbtLong.valueOf(VALUE_A).getId() == 4;
@@ -324,6 +329,7 @@ public class TestTargets {
     assert NbtShort.valueOf(VALUE_A).equals(NbtShort.valueOf(VALUE_A));
     assert !NbtShort.valueOf(VALUE_A).equals(NbtShort.valueOf(VALUE_B));
     assert !NbtShort.valueOf(VALUE_A).toString().isEmpty();
+    assert !NbtShort.valueOf(VALUE_A).getAsString().isEmpty();
     assert NbtShort.valueOf(VALUE_A).hashCode() == NbtShort.valueOf(VALUE_A).hashCode();
     ;
     assert NbtShort.valueOf(VALUE_A).getId() == 2;
