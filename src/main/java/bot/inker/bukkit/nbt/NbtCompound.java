@@ -622,7 +622,38 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
   }
 
   /**
-   * 将指定的 NBT键 设置为给定值, 如果 force 为 false 且对应的 key 无效, 则返回 null.
+   * 根据 NBT键 获取对应的 boolean, 如果没有找到对应的 boolean 则返回 false.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 boolean 的 NBT键.
+   * @return 待查找的 boolean.
+   */
+  public boolean getDeepBoolean(@NotNull String key) {
+    return getDeepBoolean(key, false);
+  }
+
+  /**
+   * 根据 NBT键 获取对应的 boolean, 如果没有找到对应的 boolean 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 boolean 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 boolean, 则返回的默认值.
+   * @return 待查找的 boolean.
+   */
+  public boolean getDeepBoolean(@NotNull String key, boolean def) {
+    try {
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_ANY_NUMBER)
+        return ((RefNbtNumber) value).asByte() != (byte) 0;
+    } catch (ClassCastException ignored) {}
+    return def;
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 如果设置前 NBT键 没有对应的 NBT值, 则返回 null.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置并返回 null.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置并返回 null.
    * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
    * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
    * NBT键 以 . 做分隔符.
@@ -630,7 +661,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    * @param force key 无效时是否强制设置.
-   * @return 待设置的 NBT键 的新值(如果 force 为 false 且对应的 key 无效, 则返回 null).
+   * @return 设置前与 NBT键 对应的 NBT值, 如果没有对应的值, 或 force 为 false 且对应的 key 无效, 则返回 null.
    */
   @Nullable
   private RefNbtBase putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force) {
@@ -679,20 +710,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
           }
           currentNbtCompound = obj;
         }
+        // 已达末级
       } else {
+        RefNbtBase previous = currentNbtCompound.get(key);
         if (SET_RETURN_SUPPORT) {
           currentNbtCompound.set1(key, value);
         } else {
           currentNbtCompound.set0(key, value);
         }
+        return previous;
       }
     }
-
-    return value;
+    return null;
   }
 
   /**
-   * 将指定的 NBT键 设置为给定值, 如果 force 为 false 且对应的 key 无效, 则返回 null.
+   * 将指定的 NBT键 设置为给定值.
+   * 如果设置前 NBT键 没有对应的 NBT值, 则返回 null.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置并返回 null.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置并返回 null.
    * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
    * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
    * NBT键 以 . 做分隔符.
@@ -700,10 +736,432 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    * @param force key 无效时是否强制设置.
-   * @return 待设置的 NBT键 的新值(如果 force 为 false 且对应的 key 无效, 则返回 null).
+   * @return 设置前与 NBT键 对应的 NBT值, 如果没有对应的值, 或 force 为 false 且对应的 key 无效, 则返回 null.
    */
   @Nullable
   public Nbt<?> putDeepNbt(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
     return fromNms(putDeepRefNbt(key, value.delegate, force));
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 如果设置前 NBT键 没有对应的 NBT值, 则返回 null.
+   * 若对应的 key 无效, 则不进行设置并返回 null.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @return 设置前与 NBT键 对应的 NBT值, 如果没有对应的值, 或 force 为 false 且对应的 key 无效, 则返回 null.
+   */
+  @Nullable
+  public Nbt<?> putDeepNbt(@NotNull String key, @NotNull Nbt<?> value) {
+    return fromNms(putDeepRefNbt(key, value.delegate, false));
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepByte(@NotNull String key, byte value, boolean force) {
+    putDeepRefNbt(key, NbtByte.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepByte(@NotNull String key, byte value) {
+    putDeepByte(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepShort(@NotNull String key, short value, boolean force) {
+    putDeepRefNbt(key, NbtShort.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepShort(@NotNull String key, short value) {
+    putDeepShort(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepInt(@NotNull String key, int value, boolean force) {
+    putDeepRefNbt(key, NbtInt.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepInt(@NotNull String key, int value) {
+    putDeepInt(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepLong(@NotNull String key, long value, boolean force) {
+    putDeepRefNbt(key, NbtLong.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepLong(@NotNull String key, long value) {
+    putDeepLong(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepFloat(@NotNull String key, float value, boolean force) {
+    putDeepRefNbt(key, NbtFloat.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepFloat(@NotNull String key, float value) {
+    putDeepFloat(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepDouble(@NotNull String key, double value, boolean force) {
+    putDeepRefNbt(key, NbtDouble.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepDouble(@NotNull String key, double value) {
+    putDeepDouble(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepString(@NotNull String key, String value, boolean force) {
+    putDeepRefNbt(key, NbtString.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepString(@NotNull String key, String value) {
+    putDeepString(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepByteArray(@NotNull String key, byte[] value, boolean force) {
+    putDeepRefNbt(key, new RefNbtTagByteArray(value), force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepByteArray(@NotNull String key, byte[] value) {
+    putDeepByteArray(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepByteArray(@NotNull String key, List<Byte> value, boolean force) {
+    putDeepRefNbt(key, new RefNbtTagByteArray(value), force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepByteArray(@NotNull String key, List<Byte> value) {
+    putDeepByteArray(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepIntArray(@NotNull String key, int[] value, boolean force) {
+    putDeepRefNbt(key, new RefNbtTagIntArray(value), force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepIntArray(@NotNull String key, int[] value) {
+    putDeepIntArray(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepIntArray(@NotNull String key, List<Integer> value, boolean force) {
+    putDeepRefNbt(key, new RefNbtTagIntArray(value), force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepIntArray(@NotNull String key, List<Integer> value) {
+    putDeepIntArray(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepLongArray(@NotNull String key, long[] value, boolean force) {
+    putDeepRefNbt(key, new RefNbtTagLongArray(value), force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepLongArray(@NotNull String key, long[] value) {
+    putDeepLongArray(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepLongArray(@NotNull String key, List<Long> value, boolean force) {
+    putDeepRefNbt(key, new RefNbtTagLongArray(value), force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepLongArray(@NotNull String key, List<Long> value) {
+    putDeepLongArray(key, value, false);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+   * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   */
+  public void putDeepBoolean(@NotNull String key, boolean value, boolean force) {
+    putDeepRefNbt(key, NbtByte.valueOf(value).delegate, force);
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值.
+   * 若对应的 key 无效, 则不进行设置.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   */
+  public void putDeepBoolean(@NotNull String key, boolean value) {
+    putDeepBoolean(key, value, false);
   }
 }
