@@ -1,9 +1,7 @@
 package bot.inker.bukkit.nbt;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.ref.RefNbtBase;
-import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
-import bot.inker.bukkit.nbt.internal.ref.RefNbtTagLongArray;
+import bot.inker.bukkit.nbt.internal.ref.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +14,8 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
   private static final boolean LONG_ARRAY_SUPPORT = CbVersion.v1_13_R1.isSupport();
   private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_17_R1.isSupport();
   private static final boolean PUT_INT_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport();
+  private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+  private static final int[] EMPTY_INT_ARRAY = new int[0];
   private static final long[] EMPTY_LONG_ARRAY = new long[0];
 
   NbtCompound(RefNbtTagCompound delegate) {
@@ -236,24 +236,24 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
   }
 
   /**
-   * 根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null.
+   * 根据 NBT键 获取对应的 RefNbtBase, 如果没有找到对应的 RefNbtBase 则返回 null.
    * NBT键 以 . 做分隔符.
    *
-   * @param key 要获取 Nbt 的 NBT键.
-   * @return 待查找的 Nbt.
+   * @param key 要获取 RefNbtBase 的 NBT键.
+   * @return 待查找的 RefNbtBase.
    */
   @Nullable
-  public Nbt<?> getDeepNbt(@NotNull String key) {
+  private RefNbtBase getDeepRefNbt(@NotNull String key) {
     String[] keys = key.split("\\.");
 
-    NbtCompound currentNbtCompound = this;
-    Nbt<?> value = null;
+    RefNbtTagCompound currentNbtCompound = this.delegate;
+    RefNbtBase value = null;
 
     for (String k : keys) {
-      if (currentNbtCompound.contains(k)) {
-        Nbt<?> obj = currentNbtCompound.get(k);
-        if (obj instanceof NbtCompound) {
-          currentNbtCompound = (NbtCompound) obj;
+      if (currentNbtCompound.hasKey(k)) {
+        RefNbtBase obj = currentNbtCompound.get(k);
+        if (obj instanceof RefNbtTagCompound) {
+          currentNbtCompound = (RefNbtTagCompound) obj;
         } else {
           value = obj;
           break;
@@ -264,6 +264,18 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     }
 
     return value;
+  }
+
+  /**
+   * 根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 Nbt 的 NBT键.
+   * @return 待查找的 Nbt.
+   */
+  @Nullable
+  public Nbt<RefNbtBase> getDeepNbt(@NotNull String key) {
+    return fromNms(getDeepRefNbt(key));
   }
 
   /**
@@ -287,9 +299,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public byte getDeepByte(@NotNull String key, byte def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
-        return ((NbtNumeric<?>) value).getAsByte();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_ANY_NUMBER)
+        return ((RefNbtNumber) value).asByte();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -315,9 +327,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public short getDeepShort(@NotNull String key, short def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
-        return ((NbtNumeric<?>) value).getAsShort();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_ANY_NUMBER)
+        return ((RefNbtNumber) value).asShort();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -343,9 +355,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public int getDeepInt(@NotNull String key, int def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
-        return ((NbtNumeric<?>) value).getAsInt();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_ANY_NUMBER)
+        return ((RefNbtNumber) value).asInt();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -371,9 +383,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public long getDeepLong(@NotNull String key, long def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
-        return ((NbtNumeric<?>) value).getAsLong();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_ANY_NUMBER)
+        return ((RefNbtNumber) value).asLong();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -399,9 +411,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public float getDeepFloat(@NotNull String key, float def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
-        return ((NbtNumeric<?>) value).getAsFloat();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_ANY_NUMBER)
+        return ((RefNbtNumber) value).asFloat();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -427,9 +439,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public double getDeepDouble(@NotNull String key, double def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
-        return ((NbtNumeric<?>) value).getAsDouble();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_ANY_NUMBER)
+        return ((RefNbtNumber) value).asDouble();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -457,9 +469,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
   @Nullable
   public String getDeepString(@NotNull String key, @Nullable String def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_STRING)
-        return value.getAsString();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_STRING)
+        return value.asString();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -472,7 +484,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @return 待查找的 byte[].
    */
   public byte[] getDeepByteArray(@NotNull String key) {
-    return getDeepByteArray(key, new byte[0]);
+    return getDeepByteArray(key, EMPTY_BYTE_ARRAY);
   }
 
   /**
@@ -485,9 +497,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public byte[] getDeepByteArray(@NotNull String key, byte[] def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_BYTE_ARRAY)
-        return ((NbtByteArray) value).getAsByteArray();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_BYTE_ARRAY)
+        return ((RefNbtTagByteArray) value).getBytes();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -500,7 +512,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @return 待查找的 int[].
    */
   public int[] getDeepIntArray(@NotNull String key) {
-    return getDeepIntArray(key, new int[0]);
+    return getDeepIntArray(key, EMPTY_INT_ARRAY);
   }
 
   /**
@@ -513,9 +525,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public int[] getDeepIntArray(@NotNull String key, int[] def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_INT_ARRAY)
-        return ((NbtIntArray) value).getAsIntArray();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_INT_ARRAY)
+        return ((RefNbtTagIntArray) value).getInts();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -528,7 +540,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @return 待查找的 long[].
    */
   public long[] getDeepLongArray(@NotNull String key) {
-    return getDeepLongArray(key, new long[0]);
+    return getDeepLongArray(key, EMPTY_LONG_ARRAY);
   }
 
   /**
@@ -541,9 +553,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    */
   public long[] getDeepLongArray(@NotNull String key, long[] def) {
     try {
-      Nbt<?> value = getDeepNbt(key);
-      if (value != null && value.getId() == NbtType.TAG_LONG_ARRAY)
-        return ((NbtLongArray) value).getAsLongArray();
+      RefNbtBase value = getDeepRefNbt(key);
+      if (value != null && value.getTypeId() == NbtType.TAG_LONG_ARRAY)
+        return ((RefNbtTagLongArray) value).getLongs();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -607,5 +619,91 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
         return (NbtList) value;
     } catch (ClassCastException ignored) {}
     return def;
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值, 如果 force 为 false 且对应的 key 无效, 则返回 null.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   * @return 待设置的 NBT键 的新值(如果 force 为 false 且对应的 key 无效, 则返回 null).
+   */
+  @Nullable
+  private RefNbtBase putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force) {
+    String[] keys = key.split("\\.");
+
+    RefNbtTagCompound currentNbtCompound = this.delegate;
+
+    // 遍历key
+    for (int i = 0; i < keys.length; i++) {
+      String k = keys[i];
+
+      // 未达末级
+      if (i != (keys.length - 1)) {
+        // 存在key
+        if (currentNbtCompound.hasKey(k)) {
+          RefNbtBase obj = currentNbtCompound.get(k);
+          // 属于RefNbtTagCompound
+          if (obj instanceof RefNbtTagCompound) {
+            currentNbtCompound = (RefNbtTagCompound) obj;
+            // 不属于RefNbtTagCompound
+          } else {
+            // 如果需要强制设置
+            if (force) {
+              // new RefNbtTagCompound()并设置
+              obj = new RefNbtTagCompound();
+              if (SET_RETURN_SUPPORT) {
+                currentNbtCompound.set1(key, obj);
+              } else {
+                currentNbtCompound.set0(key, obj);
+              }
+              currentNbtCompound = (RefNbtTagCompound) obj;
+              // 不需要强制设置
+            } else {
+              // 返回null
+              return null;
+            }
+          }
+          // 不存在key
+        } else {
+          // 创建并设置
+          RefNbtTagCompound obj = new RefNbtTagCompound();
+          if (SET_RETURN_SUPPORT) {
+            currentNbtCompound.set1(key, obj);
+          } else {
+            currentNbtCompound.set0(key, obj);
+          }
+          currentNbtCompound = obj;
+        }
+      } else {
+        if (SET_RETURN_SUPPORT) {
+          currentNbtCompound.set1(key, value);
+        } else {
+          currentNbtCompound.set0(key, value);
+        }
+      }
+    }
+
+    return value;
+  }
+
+  /**
+   * 将指定的 NBT键 设置为给定值, 如果 force 为 false 且对应的 key 无效, 则返回 null.
+   * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+   * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 待设置的 NBT键.
+   * @param value 待设置的 NBT键 的新值.
+   * @param force key 无效时是否强制设置.
+   * @return 待设置的 NBT键 的新值(如果 force 为 false 且对应的 key 无效, 则返回 null).
+   */
+  @Nullable
+  public Nbt<?> putDeepNbt(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
+    return fromNms(putDeepRefNbt(key, value.delegate, force));
   }
 }
