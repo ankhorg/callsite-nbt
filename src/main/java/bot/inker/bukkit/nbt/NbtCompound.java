@@ -4,6 +4,8 @@ import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtBase;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagLongArray;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -240,7 +242,8 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 Nbt 的 NBT键.
    * @return 待查找的 Nbt.
    */
-  public Nbt<?> getDeepNbt(String key) {
+  @Nullable
+  public Nbt<?> getDeepNbt(@NotNull String key) {
     String[] keys = key.split("\\.");
 
     NbtCompound currentNbtCompound = this;
@@ -270,7 +273,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 byte 的 NBT键.
    * @return 待查找的 byte.
    */
-  public byte getDeepByte(String key) {
+  public byte getDeepByte(@NotNull String key) {
     return getDeepByte(key, (byte) 0);
   }
 
@@ -282,10 +285,11 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 byte, 则返回的默认值.
    * @return 待查找的 byte.
    */
-  public byte getDeepByte(String key, byte def) {
+  public byte getDeepByte(@NotNull String key, byte def) {
     try {
-      if (contains(key, NbtType.TAG_ANY_NUMBER))
-        return ((NbtNumeric<?>) getDeepNbt(key)).getAsByte();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
+        return ((NbtNumeric<?>) value).getAsByte();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -297,7 +301,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 short 的 NBT键.
    * @return 待查找的 short.
    */
-  public short getDeepShort(String key) {
+  public short getDeepShort(@NotNull String key) {
     return getDeepShort(key, (short) 0);
   }
 
@@ -309,10 +313,11 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 short, 则返回的默认值.
    * @return 待查找的 short.
    */
-  public short getDeepShort(String key, short def) {
+  public short getDeepShort(@NotNull String key, short def) {
     try {
-      if (contains(key, NbtType.TAG_ANY_NUMBER))
-        return ((NbtNumeric<?>) getDeepNbt(key)).getAsShort();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
+        return ((NbtNumeric<?>) value).getAsShort();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -324,7 +329,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 int 的 NBT键.
    * @return 待查找的 int.
    */
-  public int getDeepInt(String key) {
+  public int getDeepInt(@NotNull String key) {
     return getDeepInt(key, 0);
   }
 
@@ -336,10 +341,11 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 int, 则返回的默认值.
    * @return 待查找的 int.
    */
-  public int getDeepInt(String key, int def) {
+  public int getDeepInt(@NotNull String key, int def) {
     try {
-      if (contains(key, NbtType.TAG_ANY_NUMBER))
-        return ((NbtNumeric<?>) getDeepNbt(key)).getAsInt();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
+        return ((NbtNumeric<?>) value).getAsInt();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -351,7 +357,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 long 的 NBT键.
    * @return 待查找的 long.
    */
-  public long getDeepLong(String key) {
+  public long getDeepLong(@NotNull String key) {
     return getDeepLong(key, 0);
   }
 
@@ -363,10 +369,11 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 long, 则返回的默认值.
    * @return 待查找的 long.
    */
-  public long getDeepLong(String key, long def) {
+  public long getDeepLong(@NotNull String key, long def) {
     try {
-      if (contains(key, NbtType.TAG_ANY_NUMBER))
-        return ((NbtNumeric<?>) getDeepNbt(key)).getAsLong();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
+        return ((NbtNumeric<?>) value).getAsLong();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -378,7 +385,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 float 的 NBT键.
    * @return 待查找的 float.
    */
-  public float getDeepFloat(String key) {
+  public float getDeepFloat(@NotNull String key) {
     return getDeepFloat(key, 0.0F);
   }
 
@@ -390,10 +397,11 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 float, 则返回的默认值.
    * @return 待查找的 float.
    */
-  public float getDeepFloat(String key, float def) {
+  public float getDeepFloat(@NotNull String key, float def) {
     try {
-      if (contains(key, NbtType.TAG_ANY_NUMBER))
-        return ((NbtNumeric<?>) getDeepNbt(key)).getAsFloat();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
+        return ((NbtNumeric<?>) value).getAsFloat();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -405,7 +413,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 double 的 NBT键.
    * @return 待查找的 double.
    */
-  public double getDeepDouble(String key) {
+  public double getDeepDouble(@NotNull String key) {
     return getDeepDouble(key, 0.0D);
   }
 
@@ -417,23 +425,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 double, 则返回的默认值.
    * @return 待查找的 double.
    */
-  public double getDeepDouble(String key, double def) {
+  public double getDeepDouble(@NotNull String key, double def) {
     try {
-      if (contains(key, NbtType.TAG_ANY_NUMBER))
-        return ((NbtNumeric<?>) getDeepNbt(key)).getAsDouble();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_ANY_NUMBER)
+        return ((NbtNumeric<?>) value).getAsDouble();
     } catch (ClassCastException ignored) {}
     return def;
   }
 
   /**
-   * 根据 NBT键 获取对应的 String, 如果没有找到对应的 String 则返回空字符串.
+   * 根据 NBT键 获取对应的 String, 如果没有找到对应的 String 则返回 null.
    * NBT键 以 . 做分隔符.
    *
    * @param key 要获取 String 的 NBT键.
    * @return 待查找的 String.
    */
-  public String getDeepString(String key) {
-    return getDeepString(key, "");
+  @Nullable
+  public String getDeepString(@NotNull String key) {
+    return getDeepString(key, null);
   }
 
   /**
@@ -444,10 +454,12 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 String, 则返回的默认值.
    * @return 待查找的 String.
    */
-  public String getDeepString(String key, String def) {
+  @Nullable
+  public String getDeepString(@NotNull String key, @Nullable String def) {
     try {
-      if (contains(key, NbtType.TAG_STRING))
-        return getDeepNbt(key).getAsString();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_STRING)
+        return value.getAsString();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -459,7 +471,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 byte[] 的 NBT键.
    * @return 待查找的 byte[].
    */
-  public byte[] getDeepByteArray(String key) {
+  public byte[] getDeepByteArray(@NotNull String key) {
     return getDeepByteArray(key, new byte[0]);
   }
 
@@ -471,10 +483,11 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 byte[], 则返回的默认值.
    * @return 待查找的 byte[].
    */
-  public byte[] getDeepByteArray(String key, byte[] def) {
+  public byte[] getDeepByteArray(@NotNull String key, byte[] def) {
     try {
-      if (contains(key, NbtType.TAG_BYTE_ARRAY))
-        return ((NbtByteArray) getDeepNbt(key)).getAsByteArray();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_BYTE_ARRAY)
+        return ((NbtByteArray) value).getAsByteArray();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -486,7 +499,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 int[] 的 NBT键.
    * @return 待查找的 int[].
    */
-  public int[] getDeepIntArray(String key) {
+  public int[] getDeepIntArray(@NotNull String key) {
     return getDeepIntArray(key, new int[0]);
   }
 
@@ -498,10 +511,11 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 int[], 则返回的默认值.
    * @return 待查找的 int[].
    */
-  public int[] getDeepIntArray(String key, int[] def) {
+  public int[] getDeepIntArray(@NotNull String key, int[] def) {
     try {
-      if (contains(key, NbtType.TAG_INT_ARRAY))
-        return ((NbtIntArray) getDeepNbt(key)).getAsIntArray();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_INT_ARRAY)
+        return ((NbtIntArray) value).getAsIntArray();
     } catch (ClassCastException ignored) {}
     return def;
   }
@@ -513,7 +527,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 long[] 的 NBT键.
    * @return 待查找的 long[].
    */
-  public long[] getDeepLongArray(String key) {
+  public long[] getDeepLongArray(@NotNull String key) {
     return getDeepLongArray(key, new long[0]);
   }
 
@@ -525,23 +539,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 long[], 则返回的默认值.
    * @return 待查找的 long[].
    */
-  public long[] getDeepLongArray(String key, long[] def) {
+  public long[] getDeepLongArray(@NotNull String key, long[] def) {
     try {
-      if (contains(key, NbtType.TAG_LONG_ARRAY))
-        return ((NbtLongArray) getDeepNbt(key)).getAsLongArray();
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_LONG_ARRAY)
+        return ((NbtLongArray) value).getAsLongArray();
     } catch (ClassCastException ignored) {}
     return def;
   }
 
   /**
-   * 根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则返回 new NbtCompound().
+   * 根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则返回 null.
    * NBT键 以 . 做分隔符.
    *
    * @param key 要获取 NbtCompound 的 NBT键.
    * @return 待查找的 NbtCompound.
    */
-  public NbtCompound getDeepCompound(String key) {
-    return getDeepCompound(key, new NbtCompound());
+  @Nullable
+  public NbtCompound getDeepCompound(@NotNull String key) {
+    return getDeepCompound(key, null);
   }
 
   /**
@@ -552,23 +568,26 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 NbtCompound, 则返回的默认值.
    * @return 待查找的 NbtCompound.
    */
-  public NbtCompound getDeepCompound(String key, NbtCompound def) {
+  @Nullable
+  public NbtCompound getDeepCompound(@NotNull String key, @Nullable NbtCompound def) {
     try {
-      if (contains(key, NbtType.TAG_COMPOUND))
-        return (NbtCompound) getDeepNbt(key);
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_COMPOUND)
+        return (NbtCompound) value;
     } catch (ClassCastException ignored) {}
     return def;
   }
 
   /**
-   * 根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回 new NbtList().
+   * 根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回 null.
    * NBT键 以 . 做分隔符.
    *
    * @param key 要获取 NbtList 的 NBT键.
    * @return 待查找的 NbtList.
    */
-  public NbtList getDeepList(String key) {
-    return getDeepList(key, new NbtList());
+  @Nullable
+  public NbtList getDeepList(@NotNull String key) {
+    return getDeepList(key, null);
   }
 
 
@@ -580,10 +599,12 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 NbtList, 则返回的默认值.
    * @return 待查找的 NbtList.
    */
-  public NbtList getDeepList(String key, NbtList def) {
+  @Nullable
+  public NbtList getDeepList(@NotNull String key, @Nullable NbtList def) {
     try {
-      if (contains(key, NbtType.TAG_LIST))
-        return (NbtList) getDeepNbt(key);
+      Nbt<?> value = getDeepNbt(key);
+      if (value != null && value.getId() == NbtType.TAG_LIST)
+        return (NbtList) value;
     } catch (ClassCastException ignored) {}
     return def;
   }

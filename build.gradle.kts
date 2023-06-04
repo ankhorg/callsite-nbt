@@ -42,8 +42,9 @@ java {
 dependencies {
   implementation("org.ow2.asm:asm:9.4")
   implementation("org.ow2.asm:asm-commons:9.4")
+    implementation("org.jetbrains:annotations:20.1.0")
 
-  compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 }
 
 tasks.create<ProcessJarTask>("processJar") {
