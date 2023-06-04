@@ -233,6 +233,13 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return new NbtCompound(cloneNms());
   }
 
+  /**
+   * 根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 Nbt 的 NBT键.
+   * @return 待查找的 Nbt.
+   */
   public Nbt<?> getDeepNbt(String key) {
     String[] keys = key.split("\\.");
 
@@ -256,10 +263,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return value;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 byte, 如果没有找到对应的 byte 则返回 (byte) 0.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 byte 的 NBT键.
+   * @return 待查找的 byte.
+   */
   public byte getDeepByte(String key) {
     return getDeepByte(key, (byte) 0);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 byte, 如果没有找到对应的 byte 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 byte 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 byte, 则返回的默认值.
+   * @return 待查找的 byte.
+   */
   public byte getDeepByte(String key, byte def) {
     try {
       if (contains(key, NbtType.TAG_ANY_NUMBER))
@@ -268,10 +290,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 short, 如果没有找到对应的 short 则返回 (short) 0.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 short 的 NBT键.
+   * @return 待查找的 short.
+   */
   public short getDeepShort(String key) {
     return getDeepShort(key, (short) 0);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 short, 如果没有找到对应的 short 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 short 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 short, 则返回的默认值.
+   * @return 待查找的 short.
+   */
   public short getDeepShort(String key, short def) {
     try {
       if (contains(key, NbtType.TAG_ANY_NUMBER))
@@ -280,10 +317,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 int, 如果没有找到对应的 int 则返回 0.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 int 的 NBT键.
+   * @return 待查找的 int.
+   */
   public int getDeepInt(String key) {
     return getDeepInt(key, 0);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 int, 如果没有找到对应的 int 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 int 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 int, 则返回的默认值.
+   * @return 待查找的 int.
+   */
   public int getDeepInt(String key, int def) {
     try {
       if (contains(key, NbtType.TAG_ANY_NUMBER))
@@ -292,10 +344,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 long, 如果没有找到对应的 long 则返回 0.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 long 的 NBT键.
+   * @return 待查找的 long.
+   */
   public long getDeepLong(String key) {
     return getDeepLong(key, 0);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 long, 如果没有找到对应的 long 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 long 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 long, 则返回的默认值.
+   * @return 待查找的 long.
+   */
   public long getDeepLong(String key, long def) {
     try {
       if (contains(key, NbtType.TAG_ANY_NUMBER))
@@ -304,10 +371,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 float, 如果没有找到对应的 float 则返回 0.0F.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 float 的 NBT键.
+   * @return 待查找的 float.
+   */
   public float getDeepFloat(String key) {
     return getDeepFloat(key, 0.0F);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 float, 如果没有找到对应的 float 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 float 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 float, 则返回的默认值.
+   * @return 待查找的 float.
+   */
   public float getDeepFloat(String key, float def) {
     try {
       if (contains(key, NbtType.TAG_ANY_NUMBER))
@@ -316,10 +398,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 double, 如果没有找到对应的 double 则返回 0.0D.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 double 的 NBT键.
+   * @return 待查找的 double.
+   */
   public double getDeepDouble(String key) {
     return getDeepDouble(key, 0.0D);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 double, 如果没有找到对应的 double 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 double 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 double, 则返回的默认值.
+   * @return 待查找的 double.
+   */
   public double getDeepDouble(String key, double def) {
     try {
       if (contains(key, NbtType.TAG_ANY_NUMBER))
@@ -328,10 +425,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 String, 如果没有找到对应的 String 则返回空字符串.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 String 的 NBT键.
+   * @return 待查找的 String.
+   */
   public String getDeepString(String key) {
     return getDeepString(key, "");
   }
 
+  /**
+   * 根据 NBT键 获取对应的 String, 如果没有找到对应的 String 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 String 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 String, 则返回的默认值.
+   * @return 待查找的 String.
+   */
   public String getDeepString(String key, String def) {
     try {
       if (contains(key, NbtType.TAG_STRING))
@@ -340,10 +452,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 byte[], 如果没有找到对应的 byte[] 则返回 new byte[0].
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 byte[] 的 NBT键.
+   * @return 待查找的 byte[].
+   */
   public byte[] getDeepByteArray(String key) {
     return getDeepByteArray(key, new byte[0]);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 byte[], 如果没有找到对应的 byte[] 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 byte[] 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 byte[], 则返回的默认值.
+   * @return 待查找的 byte[].
+   */
   public byte[] getDeepByteArray(String key, byte[] def) {
     try {
       if (contains(key, NbtType.TAG_BYTE_ARRAY))
@@ -352,10 +479,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 int[], 如果没有找到对应的 int[] 则返回 new int[0].
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 int[] 的 NBT键.
+   * @return 待查找的 int[].
+   */
   public int[] getDeepIntArray(String key) {
     return getDeepIntArray(key, new int[0]);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 int[], 如果没有找到对应的 int[] 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 int[] 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 int[], 则返回的默认值.
+   * @return 待查找的 int[].
+   */
   public int[] getDeepIntArray(String key, int[] def) {
     try {
       if (contains(key, NbtType.TAG_INT_ARRAY))
@@ -364,10 +506,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 long[], 如果没有找到对应的 long[] 则返回 new long[0].
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 long[] 的 NBT键.
+   * @return 待查找的 long[].
+   */
   public long[] getDeepLongArray(String key) {
     return getDeepLongArray(key, new long[0]);
   }
 
+  /**
+   * 根据 NBT键 获取对应的 long[], 如果没有找到对应的 long[] 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 long[] 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 long[], 则返回的默认值.
+   * @return 待查找的 long[].
+   */
   public long[] getDeepLongArray(String key, long[] def) {
     try {
       if (contains(key, NbtType.TAG_LONG_ARRAY))
@@ -376,10 +533,25 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则返回 new NbtCompound().
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 NbtCompound 的 NBT键.
+   * @return 待查找的 NbtCompound.
+   */
   public NbtCompound getDeepCompound(String key) {
     return getDeepCompound(key, new NbtCompound());
   }
 
+  /**
+   * 根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 NbtCompound 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 NbtCompound, 则返回的默认值.
+   * @return 待查找的 NbtCompound.
+   */
   public NbtCompound getDeepCompound(String key, NbtCompound def) {
     try {
       if (contains(key, NbtType.TAG_COMPOUND))
@@ -388,10 +560,26 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
     return def;
   }
 
+  /**
+   * 根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回 new NbtList().
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 NbtList 的 NBT键.
+   * @return 待查找的 NbtList.
+   */
   public NbtList getDeepList(String key) {
     return getDeepList(key, new NbtList());
   }
 
+
+  /**
+   * 根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回默认值.
+   * NBT键 以 . 做分隔符.
+   *
+   * @param key 要获取 NbtList 的 NBT键.
+   * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 NbtList, 则返回的默认值.
+   * @return 待查找的 NbtList.
+   */
   public NbtList getDeepList(String key, NbtList def) {
     try {
       if (contains(key, NbtType.TAG_LIST))
