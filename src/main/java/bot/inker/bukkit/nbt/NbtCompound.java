@@ -285,6 +285,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 byte 的 NBT键.
    * @return 待查找的 byte.
    */
+  @SuppressWarnings("unused")
   public byte getDeepByte(@NotNull String key) {
     return getDeepByte(key, (byte) 0);
   }
@@ -313,6 +314,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 short 的 NBT键.
    * @return 待查找的 short.
    */
+  @SuppressWarnings("unused")
   public short getDeepShort(@NotNull String key) {
     return getDeepShort(key, (short) 0);
   }
@@ -341,6 +343,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 int 的 NBT键.
    * @return 待查找的 int.
    */
+  @SuppressWarnings("unused")
   public int getDeepInt(@NotNull String key) {
     return getDeepInt(key, 0);
   }
@@ -369,6 +372,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 long 的 NBT键.
    * @return 待查找的 long.
    */
+  @SuppressWarnings("unused")
   public long getDeepLong(@NotNull String key) {
     return getDeepLong(key, 0);
   }
@@ -397,6 +401,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 float 的 NBT键.
    * @return 待查找的 float.
    */
+  @SuppressWarnings("unused")
   public float getDeepFloat(@NotNull String key) {
     return getDeepFloat(key, 0.0F);
   }
@@ -425,6 +430,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 double 的 NBT键.
    * @return 待查找的 double.
    */
+  @SuppressWarnings("unused")
   public double getDeepDouble(@NotNull String key) {
     return getDeepDouble(key, 0.0D);
   }
@@ -453,6 +459,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 String 的 NBT键.
    * @return 待查找的 String.
    */
+  @SuppressWarnings("unused")
   @Nullable
   public String getDeepString(@NotNull String key) {
     return getDeepString(key, null);
@@ -483,6 +490,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 byte[] 的 NBT键.
    * @return 待查找的 byte[].
    */
+  @SuppressWarnings("unused")
   public byte[] getDeepByteArray(@NotNull String key) {
     return getDeepByteArray(key, EMPTY_BYTE_ARRAY);
   }
@@ -511,6 +519,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 int[] 的 NBT键.
    * @return 待查找的 int[].
    */
+  @SuppressWarnings("unused")
   public int[] getDeepIntArray(@NotNull String key) {
     return getDeepIntArray(key, EMPTY_INT_ARRAY);
   }
@@ -539,6 +548,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 long[] 的 NBT键.
    * @return 待查找的 long[].
    */
+  @SuppressWarnings("unused")
   public long[] getDeepLongArray(@NotNull String key) {
     return getDeepLongArray(key, EMPTY_LONG_ARRAY);
   }
@@ -567,6 +577,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 NbtCompound 的 NBT键.
    * @return 待查找的 NbtCompound.
    */
+  @SuppressWarnings("unused")
   @Nullable
   public NbtCompound getDeepCompound(@NotNull String key) {
     return getDeepCompound(key, null);
@@ -597,6 +608,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 NbtList 的 NBT键.
    * @return 待查找的 NbtList.
    */
+  @SuppressWarnings("unused")
   @Nullable
   public NbtList getDeepList(@NotNull String key) {
     return getDeepList(key, null);
@@ -628,6 +640,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 要获取 boolean 的 NBT键.
    * @return 待查找的 boolean.
    */
+  @SuppressWarnings("unused")
   public boolean getDeepBoolean(@NotNull String key) {
     return getDeepBoolean(key, false);
   }
@@ -738,6 +751,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param force key 无效时是否强制设置.
    * @return 设置前与 NBT键 对应的 NBT值, 如果没有对应的值, 或 force 为 false 且对应的 key 无效, 则返回 null.
    */
+  @SuppressWarnings("unused")
   @Nullable
   public Nbt<?> putDeepNbt(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
     return fromNms(putDeepRefNbt(key, value.delegate, force));
@@ -754,6 +768,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param value 待设置的 NBT键 的新值.
    * @return 设置前与 NBT键 对应的 NBT值, 如果没有对应的值, 或 force 为 false 且对应的 key 无效, 则返回 null.
    */
+  @SuppressWarnings("unused")
   @Nullable
   public Nbt<?> putDeepNbt(@NotNull String key, @NotNull Nbt<?> value) {
     return fromNms(putDeepRefNbt(key, value.delegate, false));
@@ -784,6 +799,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepByte(@NotNull String key, byte value) {
     putDeepByte(key, value, false);
   }
@@ -813,6 +829,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepShort(@NotNull String key, short value) {
     putDeepShort(key, value, false);
   }
@@ -842,6 +859,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepInt(@NotNull String key, int value) {
     putDeepInt(key, value, false);
   }
@@ -871,6 +889,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepLong(@NotNull String key, long value) {
     putDeepLong(key, value, false);
   }
@@ -900,6 +919,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepFloat(@NotNull String key, float value) {
     putDeepFloat(key, value, false);
   }
@@ -929,6 +949,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepDouble(@NotNull String key, double value) {
     putDeepDouble(key, value, false);
   }
@@ -945,7 +966,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param value 待设置的 NBT键 的新值.
    * @param force key 无效时是否强制设置.
    */
-  public void putDeepString(@NotNull String key, String value, boolean force) {
+  public void putDeepString(@NotNull String key, @NotNull String value, boolean force) {
     putDeepRefNbt(key, NbtString.valueOf(value).delegate, force);
   }
 
@@ -958,7 +979,8 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
-  public void putDeepString(@NotNull String key, String value) {
+  @SuppressWarnings("unused")
+  public void putDeepString(@NotNull String key, @NotNull String value) {
     putDeepString(key, value, false);
   }
 
@@ -987,6 +1009,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepByteArray(@NotNull String key, byte[] value) {
     putDeepByteArray(key, value, false);
   }
@@ -1003,7 +1026,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param value 待设置的 NBT键 的新值.
    * @param force key 无效时是否强制设置.
    */
-  public void putDeepByteArray(@NotNull String key, List<Byte> value, boolean force) {
+  public void putDeepByteArray(@NotNull String key, @NotNull List<Byte> value, boolean force) {
     putDeepRefNbt(key, new RefNbtTagByteArray(value), force);
   }
 
@@ -1016,7 +1039,8 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
-  public void putDeepByteArray(@NotNull String key, List<Byte> value) {
+  @SuppressWarnings("unused")
+  public void putDeepByteArray(@NotNull String key, @NotNull List<Byte> value) {
     putDeepByteArray(key, value, false);
   }
 
@@ -1045,6 +1069,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepIntArray(@NotNull String key, int[] value) {
     putDeepIntArray(key, value, false);
   }
@@ -1061,7 +1086,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param value 待设置的 NBT键 的新值.
    * @param force key 无效时是否强制设置.
    */
-  public void putDeepIntArray(@NotNull String key, List<Integer> value, boolean force) {
+  public void putDeepIntArray(@NotNull String key, @NotNull List<Integer> value, boolean force) {
     putDeepRefNbt(key, new RefNbtTagIntArray(value), force);
   }
 
@@ -1074,7 +1099,8 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
-  public void putDeepIntArray(@NotNull String key, List<Integer> value) {
+  @SuppressWarnings("unused")
+  public void putDeepIntArray(@NotNull String key, @NotNull List<Integer> value) {
     putDeepIntArray(key, value, false);
   }
 
@@ -1103,6 +1129,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepLongArray(@NotNull String key, long[] value) {
     putDeepLongArray(key, value, false);
   }
@@ -1119,7 +1146,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param value 待设置的 NBT键 的新值.
    * @param force key 无效时是否强制设置.
    */
-  public void putDeepLongArray(@NotNull String key, List<Long> value, boolean force) {
+  public void putDeepLongArray(@NotNull String key, @NotNull List<Long> value, boolean force) {
     putDeepRefNbt(key, new RefNbtTagLongArray(value), force);
   }
 
@@ -1132,7 +1159,8 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
-  public void putDeepLongArray(@NotNull String key, List<Long> value) {
+  @SuppressWarnings("unused")
+  public void putDeepLongArray(@NotNull String key, @NotNull List<Long> value) {
     putDeepLongArray(key, value, false);
   }
 
@@ -1161,6 +1189,7 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
    * @param key 待设置的 NBT键.
    * @param value 待设置的 NBT键 的新值.
    */
+  @SuppressWarnings("unused")
   public void putDeepBoolean(@NotNull String key, boolean value) {
     putDeepBoolean(key, value, false);
   }
