@@ -42,9 +42,9 @@ java {
 dependencies {
   implementation("org.ow2.asm:asm:9.4")
   implementation("org.ow2.asm:asm-commons:9.4")
-    implementation("org.jetbrains:annotations:20.1.0")
+  implementation("org.jetbrains:annotations:20.1.0")
 
-    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+  compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 }
 
 tasks.create<ProcessJarTask>("processJar") {
@@ -66,6 +66,14 @@ tasks.create<ProcessJarTask>("processJar") {
     "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.19.4-cl.csrg?at=4d9436f7b66190ad21fe4e3975b73a36b7ad2a7e",
     null
   )
+}
+
+tasks.javadoc {
+  options.encoding = "UTF-8"
+}
+
+tasks.compileJava {
+  options.encoding = "UTF-8"
 }
 
 tasks.jar {
