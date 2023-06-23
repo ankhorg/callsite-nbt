@@ -759,9 +759,9 @@ public final class CallSiteInstaller {
       } else if (opcode == Opcodes.PUTSTATIC) {
         handle = lookup.findStaticSetter(ownerClass, name, targetClass).asType(type);
       } else if (opcode == Opcodes.GETFIELD) {
-        handle = lookup.findGetter(ownerClass, name, targetClass);
+        handle = lookup.findGetter(ownerClass, name, targetClass).asType(type);
       } else if (opcode == Opcodes.PUTFIELD) {
-        handle = lookup.findSetter(ownerClass, name, targetClass);
+        handle = lookup.findSetter(ownerClass, name, targetClass).asType(type);
       } else {
         throw new IllegalStateException("Unsupported invokeField opcode: " + opcode);
       }
