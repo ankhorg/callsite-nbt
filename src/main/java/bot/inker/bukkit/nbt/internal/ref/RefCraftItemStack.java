@@ -8,24 +8,23 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack")
 public final class RefCraftItemStack {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "")
-    public RefCraftItemStack(RefItemStack item) {
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;<init>(Lnet/minecraft/server/v1_12_R1/ItemStack;)V")
+    private RefCraftItemStack(RefItemStack item) {
         throw new UnsupportedOperationException();
     }
 
-//    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;<init>(Lorg/bukkit/inventory/ItemStack;)V")
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "")
-    public RefCraftItemStack(ItemStack item) {
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;<init>(Lorg/bukkit/inventory/ItemStack;)V")
+    private RefCraftItemStack(ItemStack item) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "")
-    public RefCraftItemStack(Material type, int amount, short durability, ItemMeta itemMeta) {
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;<init>(Lorg/bukkit/Material;I;S;Lorg/bukkit/inventory/meta/ItemMeta;)V")
+    private RefCraftItemStack(Material type, int amount, short durability, ItemMeta itemMeta) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "")
-    public RefCraftItemStack(int typeId, int amount, short durability, ItemMeta itemMeta) {
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;<init>(I;I;S;Lorg/bukkit/inventory/meta/ItemMeta;)V")
+    private RefCraftItemStack(int typeId, int amount, short durability, ItemMeta itemMeta) {
         throw new UnsupportedOperationException();
     }
 
