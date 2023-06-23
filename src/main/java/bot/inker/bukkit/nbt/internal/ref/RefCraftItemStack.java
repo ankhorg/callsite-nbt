@@ -8,6 +8,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack")
 public final class RefCraftItemStack {
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;handle:Lnet/minecraft/server/v1_12_R1/ItemStack;", accessor = true)
+    public RefItemStack handle;
+
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;<init>(Lnet/minecraft/server/v1_12_R1/ItemStack;)V")
     private RefCraftItemStack(RefItemStack item) {
         throw new UnsupportedOperationException();
@@ -27,6 +30,12 @@ public final class RefCraftItemStack {
     private RefCraftItemStack(int typeId, int amount, short durability, ItemMeta itemMeta) {
         throw new UnsupportedOperationException();
     }
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;getItemMeta()Lorg/bukkit/inventory/meta/ItemMeta;")
+    public native ItemMeta getItemMeta();
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;setItemMeta(Lorg/bukkit/inventory/meta/ItemMeta;)Z")
+    public native void setItemMeta(ItemMeta itemMeta);
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asNMSCopy(Lorg/bukkit/inventory/ItemStack;)Lnet/minecraft/server/v1_12_R1/ItemStack;")
     public static native RefItemStack asNMSCopy(ItemStack original);
