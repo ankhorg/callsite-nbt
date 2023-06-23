@@ -620,7 +620,25 @@ public final class CallSiteInstaller {
         return;
       }
       String[] reference = parseField(handleBy.reference());
-      super.visitFieldInsn(opcode, reference[0], reference[1], reference[2]);
+      if (handleBy.accessor()) {
+        boolean isStatic = (opcode == Opcodes.GETSTATIC || opcode == Opcodes.PUTSTATIC);
+        boolean isSet = (opcode == Opcodes.PUTSTATIC || opcode == Opcodes.PUTFIELD);
+        super.visitInvokeDynamicInsn(
+            reference[1],
+            "(" + (isStatic ? "" : ("L" + owner + ";")) + (isSet ? descriptor : "") + ")" + (isSet ? "V" : descriptor),
+            new Handle(
+                Opcodes.H_INVOKESTATIC,
+                Type.getInternalName(Spy.class),
+                "bootstrap",
+                "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;",
+                false),
+            opcode,
+            reference[0],
+            reference[2]
+        );
+      }else {
+        super.visitFieldInsn(opcode, reference[0], reference[1], reference[2]);
+      }
     }
 
     @Override
@@ -643,27 +661,13 @@ public final class CallSiteInstaller {
       }
       String[] reference = parseMethod(handleBy.reference());
       if (handleBy.accessor()) {
-        String bootstrapName;
-        try {
-          bootstrapName = Spy.class.getDeclaredMethod(
-              "bootstrap",
-              MethodHandles.Lookup.class,
-              String.class,
-              MethodType.class,
-              int.class,
-              String.class,
-              String.class
-          ).getName();
-        } catch (NoSuchMethodException e) {
-          throw new RuntimeException(e);
-        }
         super.visitInvokeDynamicInsn(
             reference[1],
             (opcode == Opcodes.INVOKESTATIC) ? descriptor : ("(L" + owner + ";" + descriptor.substring(1)),
             new Handle(
                 Opcodes.H_INVOKESTATIC,
                 Type.getInternalName(Spy.class),
-                bootstrapName,
+                "bootstrap",
                 "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;ILjava/lang/String;Ljava/lang/String;)Ljava/lang/invoke/CallSite;",
                 false),
             opcode,
@@ -688,10 +692,34 @@ public final class CallSiteInstaller {
         int opcode,
         String owner,
         String describe
-    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException {
+    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {
       Class<?> caller = callerLookup.lookupClass();
       ClassLoader classLoader = caller.getClassLoader();
       Class<?> ownerClass = Class.forName(owner.replace('/', '.'), false, classLoader);
+      if(opcode == Opcodes.INVOKEVIRTUAL
+          || opcode == Opcodes.INVOKESPECIAL
+          || opcode == Opcodes.INVOKESTATIC
+          || opcode == Opcodes.INVOKEINTERFACE){
+        return bootstrapMethod(caller, type, classLoader, ownerClass, name, describe, opcode);
+      } else if (opcode == Opcodes.GETSTATIC
+          || opcode == Opcodes.PUTSTATIC
+          || opcode == Opcodes.GETFIELD
+          || opcode == Opcodes.PUTFIELD) {
+        return bootstrapField(caller, type, classLoader, ownerClass, name, describe, opcode);
+      }else{
+        throw new IllegalStateException("Unsupported bootstrap opcode: " + opcode);
+      }
+    }
+
+    private static CallSite bootstrapMethod(
+        Class<?> caller,
+        MethodType type,
+        ClassLoader classLoader,
+        Class<?> ownerClass,
+        String name,
+        String describe,
+        int opcode
+    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException {
       Type targetType = Type.getMethodType(describe);
       Type[] targetArgumentTypes = targetType.getArgumentTypes();
       Class<?>[] targetArgumentClasses = new Class[targetArgumentTypes.length];
@@ -711,6 +739,31 @@ public final class CallSiteInstaller {
         handle = lookup.findVirtual(ownerClass, name, targetMethodType).asType(type);
       } else {
         throw new IllegalStateException("Unsupported invokeMethod opcode: " + opcode);
+      }
+      return new ConstantCallSite(handle);
+    }
+
+    private static CallSite bootstrapField(
+        Class<?> caller,
+        MethodType type,
+        ClassLoader classLoader,
+        Class<?> ownerClass,
+        String name,
+        String describe,
+        int opcode
+    ) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+      Class<?> targetClass = typeToClass(classLoader, Type.getType(describe));
+      MethodHandle handle;
+      if (opcode == Opcodes.GETSTATIC) {
+        handle = lookup.findStaticGetter(ownerClass, name, targetClass).asType(type);
+      } else if (opcode == Opcodes.PUTSTATIC) {
+        handle = lookup.findStaticSetter(ownerClass, name, targetClass).asType(type);
+      } else if (opcode == Opcodes.GETFIELD) {
+        handle = lookup.findGetter(ownerClass, name, targetClass);
+      } else if (opcode == Opcodes.PUTFIELD) {
+        handle = lookup.findSetter(ownerClass, name, targetClass);
+      } else {
+        throw new IllegalStateException("Unsupported invokeField opcode: " + opcode);
       }
       return new ConstantCallSite(handle);
     }
