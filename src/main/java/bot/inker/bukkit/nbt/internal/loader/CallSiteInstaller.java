@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 
-public class CallSiteInstaller {
+public final class CallSiteInstaller {
   private static final String CSN_PACKAGE;
   private static final String CSN_CLASS_FILE_PREFIX;
   private static final String CSN_LOADER_PACKAGE;
@@ -73,6 +73,7 @@ public class CallSiteInstaller {
           NbtNumeric.class, NbtShort.class, NbtString.class
       };
       for (Class<?> loadedClass : classes) {
+        // ensure class loaded
         loadedClass.getName();
       }
       loaded = true;

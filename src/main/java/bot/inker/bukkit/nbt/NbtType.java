@@ -1,6 +1,6 @@
 package bot.inker.bukkit.nbt;
 
-public class NbtType {
+public final class NbtType {
     public static final int TAG_END = 0;
 
     public static final int TAG_BYTE = 1;
@@ -28,4 +28,8 @@ public class NbtType {
     public static final int TAG_LONG_ARRAY = 12;
 
     public static final int TAG_ANY_NUMBER = 99;
+
+    private NbtType() {
+        throw new UnsupportedOperationException();
+    }
 }

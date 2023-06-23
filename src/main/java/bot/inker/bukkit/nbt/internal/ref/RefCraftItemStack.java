@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack")
-public class RefCraftItemStack {
+public final class RefCraftItemStack {
     @HandleBy(version = CbVersion.v1_12_R1, reference = "")
     public RefCraftItemStack(RefItemStack item) {
         throw new UnsupportedOperationException();
