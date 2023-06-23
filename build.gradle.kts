@@ -45,6 +45,7 @@ dependencies {
   implementation("org.jetbrains:annotations:20.1.0")
 
   compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+  compileOnly(fileTree("libs"))
 }
 
 tasks.create<ProcessJarTask>("processJar") {
