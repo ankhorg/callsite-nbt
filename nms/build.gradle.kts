@@ -30,4 +30,6 @@ dependencies {
 
   // compileOnly("bot.inker.ulmc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
   // compileOnly("bot.inker.ulmc.paper:paper-server:1.19.4-R0.1-SNAPSHOT:mojang-mapped")
+  
+  compileOnly(fileTree("libs"))
 }

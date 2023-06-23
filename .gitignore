@@ -1,5 +1,5 @@
 /.idea
 /.gradle
-/libs
+/nms/libs
 /**/build
 /run
