@@ -701,9 +701,9 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
               // new RefNbtTagCompound()并设置
               obj = new RefNbtTagCompound();
               if (SET_RETURN_SUPPORT) {
-                currentNbtCompound.set1(key, obj);
+                currentNbtCompound.set1(k, obj);
               } else {
-                currentNbtCompound.set0(key, obj);
+                currentNbtCompound.set0(k, obj);
               }
               currentNbtCompound = (RefNbtTagCompound) obj;
               // 不需要强制设置
@@ -717,19 +717,19 @@ public final class NbtCompound extends Nbt<RefNbtTagCompound> {
           // 创建并设置
           RefNbtTagCompound obj = new RefNbtTagCompound();
           if (SET_RETURN_SUPPORT) {
-            currentNbtCompound.set1(key, obj);
+            currentNbtCompound.set1(k, obj);
           } else {
-            currentNbtCompound.set0(key, obj);
+            currentNbtCompound.set0(k, obj);
           }
           currentNbtCompound = obj;
         }
         // 已达末级
       } else {
-        RefNbtBase previous = currentNbtCompound.get(key);
+        RefNbtBase previous = currentNbtCompound.get(k);
         if (SET_RETURN_SUPPORT) {
-          currentNbtCompound.set1(key, value);
+          currentNbtCompound.set1(k, value);
         } else {
-          currentNbtCompound.set0(key, value);
+          currentNbtCompound.set0(k, value);
         }
         return previous;
       }

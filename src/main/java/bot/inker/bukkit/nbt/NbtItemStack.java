@@ -32,11 +32,13 @@ public class NbtItemStack {
     }
 
     public NbtCompound getTag() {
-        return new NbtCompound(nmsItemStack.getTag());
+        RefNbtTagCompound nbt = nmsItemStack.getTag();
+        return nbt == null ? null : new NbtCompound(nbt);
     }
 
     public NbtCompound getTagClone() {
-        return new NbtCompound(nmsItemStack.getTag() == null ? null : (RefNbtTagCompound)nmsItemStack.getTag().rClone());
+        RefNbtTagCompound nbt = nmsItemStack.getTag();
+        return nbt == null ? null : new NbtCompound((RefNbtTagCompound)nbt.rClone());
     }
 
     public NbtCompound getOrCreateTag() {
