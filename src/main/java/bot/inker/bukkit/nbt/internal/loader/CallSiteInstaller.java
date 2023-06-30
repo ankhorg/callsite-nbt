@@ -233,32 +233,40 @@ public final class CallSiteInstaller {
   }
 
   private static String[] parseMethod(String reference) {
-    reference = remapping.getOrDefault(reference, reference);
+    String newReference = remapping.get(reference);
+    boolean withFullRemap = (newReference != null);
+    reference = withFullRemap ? newReference : reference;
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf('(', firstSplitIndex);
+    Type ownerType = Type.getObjectType(reference.substring(1, firstSplitIndex));
+    Type methodDesc = Type.getMethodType(reference.substring(secondSplitIndex));
+    if(!withFullRemap) {
+      ownerType = remapType(ownerType);
+      methodDesc = remapType(methodDesc);
+    }
     String[] result = new String[3];
-    result[0] = parseType(
-        Type.getObjectType(reference.substring(1, firstSplitIndex))
-    ).getInternalName();
+    result[0] = parseType(ownerType).getInternalName();
     result[1] = reference.substring(firstSplitIndex + 1, secondSplitIndex);
-    result[2] = parseType(
-        Type.getMethodType(reference.substring(secondSplitIndex))
-    ).getDescriptor();
+    result[2] = parseType(methodDesc).getDescriptor();
     return result;
   }
 
   private static String[] parseField(String reference) {
-    reference = remapping.getOrDefault(reference, reference);
+    String newReference = remapping.get(reference);
+    boolean withFullRemap = (newReference != null);
+    reference = withFullRemap ? newReference : reference;
     int firstSplitIndex = reference.indexOf(';');
     int secondSplitIndex = reference.indexOf(':');
+    Type ownerType = Type.getObjectType(reference.substring(1, firstSplitIndex));
+    Type valueType = Type.getType(reference.substring(secondSplitIndex + 1));
+    if(!withFullRemap) {
+      ownerType = remapType(ownerType);
+      valueType = remapType(valueType);
+    }
     String[] result = new String[3];
-    result[0] = parseType(
-        Type.getObjectType(reference.substring(1, firstSplitIndex))
-    ).getInternalName();
+    result[0] = parseType(ownerType).getInternalName();
     result[1] = reference.substring(firstSplitIndex + 1, secondSplitIndex);
-    result[2] = parseType(
-        Type.getType(reference.substring(secondSplitIndex + 1))
-    ).getDescriptor();
+    result[2] = parseType(valueType).getDescriptor();
     return result;
   }
 
@@ -294,6 +302,30 @@ public final class CallSiteInstaller {
           newArgumentTypes[i] = parseType(methodType.getArgumentTypes()[i]);
         }
         return Type.getMethodType(parseType(methodType.getReturnType()), newArgumentTypes);
+      default:
+        return type;
+    }
+  }
+
+  private static Type remapType(Type type) {
+    switch (type.getSort()) {
+      case Type.ARRAY:
+        StringBuilder remappedDescriptor = new StringBuilder();
+        for (int i = 0; i < type.getDimensions(); ++i) {
+          remappedDescriptor.append('[');
+        }
+        remappedDescriptor.append(remapType(type.getElementType()).getDescriptor());
+        return Type.getType(remappedDescriptor.toString());
+      case Type.OBJECT:
+        String internalName = type.getInternalName();
+        return Type.getObjectType(remapping.getOrDefault(internalName, internalName));
+      case Type.METHOD:
+        Type methodType = Type.getMethodType(type.getDescriptor());
+        Type[] newArgumentTypes = new Type[methodType.getArgumentTypes().length];
+        for (int i = 0; i < newArgumentTypes.length; i++) {
+          newArgumentTypes[i] = remapType(methodType.getArgumentTypes()[i]);
+        }
+        return Type.getMethodType(remapType(methodType.getReturnType()), newArgumentTypes);
       default:
         return type;
     }

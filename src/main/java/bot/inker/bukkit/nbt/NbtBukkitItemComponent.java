@@ -12,16 +12,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class NbtBukkitItemComponent implements NbtComponentLike {
   private static final Set<String> HANDLED_TAGS = ImmutableSet.copyOf(RefCraftMetaItem.HANDLED_TAGS);
-  private static final Function<Map.Entry<String, ?>, String> ENTRY_GET_KEY = Entry::getKey;
-  private static final Function<Nbt<?>, String> NBT_GET_AS_STRING = Nbt::getAsString;
-  private static final Function<String, NbtString> NBT_STRING_VALUE_OF = NbtString::valueOf;
-  private static final Collector<Nbt<?>, ?, NbtList> NBT_LIST_COLLECTOR = Collectors.toCollection(NbtList::new);
 
   private final Map<String, Nbt<?>> delegateMap;
   private final ItemStack itemStack;

@@ -66,6 +66,12 @@ tasks.create<ProcessJarTask>("processJar") {
     "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.19.4-cl.csrg?at=4d9436f7b66190ad21fe4e3975b73a36b7ad2a7e",
     null
   )
+  addSpigotBuildInfo(
+    "v1_20",
+    "https://piston-data.mojang.com/v1/objects/0b4dba049482496c507b2387a73a913230ebbd76/server.txt",
+    "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.20.1-cl.csrg?at=faff587dcbe915bc565bf01f2d54c6af86039414",
+    null
+  )
 }
 
 tasks.javadoc {
