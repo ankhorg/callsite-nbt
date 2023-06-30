@@ -146,13 +146,13 @@ publishing {
     }
     create<MavenPublication>("fatJar") {
       artifactId += "-fat"
-      artifact(tasks["fatJar"]){
+      artifact(tasks["fatJar"]) {
         classifier = null
       }
     }
     create<MavenPublication>("proguardJar") {
       artifactId += "-obf"
-      artifact(tasks["proguardJar"]){
+      artifact(tasks["proguardJar"]) {
         classifier = null
       }
     }

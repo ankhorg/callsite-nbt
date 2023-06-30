@@ -344,7 +344,7 @@ public final class CallSiteInstaller {
       case Type.DOUBLE:
         return double.class;
       case Type.ARRAY: {
-        Class<?> currentClass = Class.forName(type.getElementType().getClassName(), false, classLoader);
+        Class<?> currentClass = typeToClass(classLoader, type.getElementType());
         for (int i = 0; i < type.getDimensions(); i++) {
           currentClass = Array.newInstance(currentClass, 0).getClass();
         }
@@ -637,7 +637,7 @@ public final class CallSiteInstaller {
             reference[0],
             reference[2]
         );
-      }else {
+      } else {
         super.visitFieldInsn(opcode, reference[0], reference[1], reference[2]);
       }
     }
@@ -697,17 +697,17 @@ public final class CallSiteInstaller {
       Class<?> caller = callerLookup.lookupClass();
       ClassLoader classLoader = caller.getClassLoader();
       Class<?> ownerClass = Class.forName(owner.replace('/', '.'), false, classLoader);
-      if(opcode == Opcodes.INVOKEVIRTUAL
+      if (opcode == Opcodes.INVOKEVIRTUAL
           || opcode == Opcodes.INVOKESPECIAL
           || opcode == Opcodes.INVOKESTATIC
-          || opcode == Opcodes.INVOKEINTERFACE){
+          || opcode == Opcodes.INVOKEINTERFACE) {
         return bootstrapMethod(caller, type, classLoader, ownerClass, name, describe, opcode);
       } else if (opcode == Opcodes.GETSTATIC
           || opcode == Opcodes.PUTSTATIC
           || opcode == Opcodes.GETFIELD
           || opcode == Opcodes.PUTFIELD) {
         return bootstrapField(caller, type, classLoader, ownerClass, name, describe, opcode);
-      }else{
+      } else {
         throw new IllegalStateException("Unsupported bootstrap opcode: " + opcode);
       }
     }

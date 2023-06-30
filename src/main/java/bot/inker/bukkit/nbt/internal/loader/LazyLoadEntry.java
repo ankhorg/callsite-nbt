@@ -2,7 +2,7 @@ package bot.inker.bukkit.nbt.internal.loader;
 
 import java.util.Map;
 
-public final class LazyLoadEntry<K,V> implements Map.Entry<K,V> {
+public final class LazyLoadEntry<K, V> implements Map.Entry<K, V> {
   private final K key;
   private final Map<K, V> loader;
 

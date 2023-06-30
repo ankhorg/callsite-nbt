@@ -6,8 +6,6 @@ import bot.inker.bukkit.nbt.internal.ref.RefNbtBase;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagEnd;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagList;
 
-import java.util.*;
-
 public final class NbtList extends NbtCollection<RefNbtTagList, Nbt<?>> implements NbtListLike {
   private final static boolean THROW_INDEX_SUPPORT = CbVersion.v1_13_R1.isSupport();
   private final static boolean RETURN_SET_SUPPORT = CbVersion.v1_13_R1.isSupport();

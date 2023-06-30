@@ -1,10 +1,13 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagLongArray;
 
 import java.util.List;
 
 public final class NbtLongArray extends NbtCollection<RefNbtTagLongArray, Long> {
+  private static final boolean DIRECT_ACCESS_SUPPORT = CbVersion.v1_13_R1.isSupport();
+
   NbtLongArray(RefNbtTagLongArray delegate) {
     super(delegate);
   }
@@ -19,16 +22,16 @@ public final class NbtLongArray extends NbtCollection<RefNbtTagLongArray, Long> 
 
   @Override
   public Long get(int index) {
-    return delegate.getLongs()[index];
+    return getAsLongArray()[index];
   }
 
   public long getLong(int index) {
-    return delegate.getLongs()[index];
+    return getAsLongArray()[index];
   }
 
   @Override
   public int size() {
-    return delegate.getLongs().length;
+    return getAsLongArray().length;
   }
 
   @Override
@@ -47,7 +50,11 @@ public final class NbtLongArray extends NbtCollection<RefNbtTagLongArray, Long> 
   }
 
   public long[] getAsLongArray() {
-    return delegate.getLongs();
+    if (DIRECT_ACCESS_SUPPORT) {
+      return delegate.getLongs();
+    } else {
+      return delegate.longs;
+    }
   }
 
   @Override

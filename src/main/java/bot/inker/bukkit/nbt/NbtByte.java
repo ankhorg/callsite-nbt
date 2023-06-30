@@ -24,10 +24,6 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> implements NbtByteL
     return result;
   }
 
-  public boolean getAsBoolean() {
-    return getAsByte() != 0;
-  }
-
   public static NbtByte valueOf(byte value) {
     return instanceCache[value + 128];
   }
@@ -38,6 +34,10 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> implements NbtByteL
 
   public static NbtByte valueOf(boolean value) {
     return value ? trueInstance : falseInstance;
+  }
+
+  public boolean getAsBoolean() {
+    return getAsByte() != 0;
   }
 
   @Override

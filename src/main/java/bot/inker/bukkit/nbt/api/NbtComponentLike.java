@@ -3,11 +3,9 @@ package bot.inker.bukkit.nbt.api;
 import bot.inker.bukkit.nbt.*;
 import bot.inker.bukkit.nbt.internal.loader.ArrayUtils;
 import bot.inker.bukkit.nbt.internal.loader.StringUtils;
-import bot.inker.bukkit.nbt.internal.ref.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,7 +25,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
 
   Nbt<?> remove(String key);
 
-  default Nbt<?> remove(Object key){
+  default Nbt<?> remove(Object key) {
     return (key instanceof String)
         ? remove((String) key)
         : null;
@@ -157,7 +155,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
   }
 
   default String getString(String key) {
-    return ((NbtNumeric<?>) get(key)).getAsString();
+    return get(key).getAsString();
   }
 
   default byte[] getByteArray(String key) {
@@ -576,7 +574,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
 
       if (i == (keys.length - 1)) {
         currentNbtCompound.set(k, value); // is last node
-      }else{
+      } else {
         if (currentNbtCompound.containsKey(k)) {
           Nbt<?> obj = currentNbtCompound.get(k);
           if (obj instanceof NbtComponentLike) {

@@ -1,6 +1,9 @@
 package bot.inker.bukkit.nbt.internal.loader;
 
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class LazyLoadEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
   private final Map<K, V> loader;

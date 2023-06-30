@@ -8,6 +8,9 @@ import java.util.List;
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/NBTTagLongArray")
 @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/nbt/LongArrayTag")
 public final class RefNbtTagLongArray extends RefNbtBase {
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagLongArray;b:[J", accessor = true)
+  public long[] longs;
+
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagLongArray;<init>([J)V")
   @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/LongArrayTag;<init>([J)V")
   public RefNbtTagLongArray(long[] value) {
@@ -20,7 +23,6 @@ public final class RefNbtTagLongArray extends RefNbtBase {
     throw new UnsupportedOperationException();
   }
 
-  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagLongArray;b:[J", accessor = true)
   @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/NBTTagLongArray;d()[J")
   @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/NBTTagLongArray;getLongs()[J")
   @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/LongArrayTag;getAsLongArray()[J")

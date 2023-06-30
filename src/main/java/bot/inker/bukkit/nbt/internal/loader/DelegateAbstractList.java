@@ -17,8 +17,8 @@ public final class DelegateAbstractList<E> extends AbstractList<E> {
 
   @Override
   public int size() {
-      return delegate.size();
-    }
+    return delegate.size();
+  }
 
   @Override
   public E set(int index, E element) {

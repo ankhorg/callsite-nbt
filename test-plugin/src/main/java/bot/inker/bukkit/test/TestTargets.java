@@ -1,7 +1,10 @@
 package bot.inker.bukkit.test;
 
 import bot.inker.bukkit.nbt.*;
+import bot.inker.bukkit.nbt.api.NbtComponentLike;
 import com.google.common.collect.ImmutableList;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +31,7 @@ public class TestTargets {
     runTest("NbtLongArray", this::testNbtLongArray);
     runTest("NbtShort", this::testNbtShort);
     runTest("NbtString", this::testNbtString);
+    runTest("NbtItemStack", this::testNbtItemStack);
   }
 
   private void runTest(String name, Runnable action) {
@@ -83,11 +87,14 @@ public class TestTargets {
 
   private void testNbtCompound() {
     NbtCompound compound = new NbtCompound();
+    testNbtComponentLike(compound);
+  }
 
+  private void testNbtComponentLike(NbtComponentLike compound) {
     compound.set("Hello", NbtString.valueOf("World"));
     assert NbtString.valueOf("World").equals(compound.get("Hello"));
-    assert compound.getAllKeys().contains("Hello");
-    assert compound.getAllKeys().size() == 1;
+    assert compound.keySet().contains("Hello");
+    assert compound.keySet().size() == 1;
     assert compound.size() == 1;
     assert NbtString.valueOf("World").equals(compound.clone().get("Hello"));
 
@@ -95,7 +102,7 @@ public class TestTargets {
     assert NbtString.valueOf("World").equals(oldNbtValue);
     assert NbtString.valueOf("Minecraft").equals(compound.get("Hello"));
     compound.remove("Hello");
-    assert !compound.contains("Hello");
+    assert !compound.containsKey("Hello");
     assert compound.isEmpty();
 
     compound.putByte("TestByte", (byte) 123);
@@ -348,5 +355,13 @@ public class TestTargets {
     assert NbtString.valueOf(VALUE_A).getId() == 8;
     NbtString instanceA = NbtString.valueOf(VALUE_A);
     assert instanceA.clone() == instanceA;
+  }
+
+  private void testNbtItemStack() {
+    ItemStack itemStack = new ItemStack(Material.STONE);
+    NbtItemStack nbtItemStack = new NbtItemStack(itemStack);
+    assert nbtItemStack.asItemStack() == itemStack;
+    NbtComponentLike directTag = nbtItemStack.getDirectTag();
+    testNbtComponentLike(directTag);
   }
 }

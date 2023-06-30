@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public final class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentLike {
+public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentLike {
   private static final boolean SET_RETURN_SUPPORT = CbVersion.v1_14_R1.isSupport();
   private static final boolean LONG_ARRAY_SUPPORT = CbVersion.v1_13_R1.isSupport();
   private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_17_R1.isSupport();

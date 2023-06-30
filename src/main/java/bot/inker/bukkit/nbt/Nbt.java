@@ -11,7 +11,7 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
     }
   }
 
-  protected final NMS delegate;
+  final NMS delegate;
 
   Nbt(NMS delegate) {
     this.delegate = delegate;

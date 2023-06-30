@@ -22,7 +22,7 @@ public abstract class RefNbtBase {
   @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/Tag;copy()Lnet/minecraft/nbt/Tag;", isInterface = true)
   public native RefNbtBase rClone();
 
-  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTBase;c_()Ljava/lang/String;")
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTBase;c_()Ljava/lang/String;", accessor = true)
   @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/NBTBase;asString()Ljava/lang/String;")
   @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/Tag;getAsString()Ljava/lang/String;", isInterface = true)
   public native String asString();
