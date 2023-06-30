@@ -5,17 +5,17 @@ import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/ItemStack")
 @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/item/ItemStack")
-public final class RefItemStack {
+public final class RefNmsItemStack {
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;<init>(Lnet/minecraft/server/v1_12_R1/Item;)V")
     @HandleBy(version = CbVersion.v1_13_R1, reference = "")
-    public RefItemStack(RefItem item) {
+    public RefNmsItemStack(RefItem item) {
         throw new UnsupportedOperationException();
     }
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "")
     @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R2/ItemStack;<init>(Lnet/minecraft/server/v1_13_R2/IMaterial;)V")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V")
-    public RefItemStack(RefIMaterial imaterial) {
+    public RefNmsItemStack(RefIMaterial imaterial) {
         throw new UnsupportedOperationException();
     }
 

@@ -1,9 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtShortLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagShort;
 
-public final class NbtShort extends NbtNumeric<RefNbtTagShort> {
+public final class NbtShort extends NbtNumeric<RefNbtTagShort> implements NbtShortLike {
   private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtShort[] instanceCache = buildInstanceCache();
 

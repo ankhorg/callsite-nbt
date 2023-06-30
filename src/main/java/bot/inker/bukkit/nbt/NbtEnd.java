@@ -1,10 +1,11 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtEndLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtBase;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagEnd;
 
-public final class NbtEnd extends Nbt<RefNbtTagEnd> {
+public final class NbtEnd extends Nbt<RefNbtTagEnd> implements NbtEndLike {
   private static final boolean INSTANCE_FIELD_SUPPORT = CbVersion.v1_15_R1.isSupport();
 
   static final NbtEnd INSTANCE = INSTANCE_FIELD_SUPPORT

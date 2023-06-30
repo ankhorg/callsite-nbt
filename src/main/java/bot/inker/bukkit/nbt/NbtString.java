@@ -1,9 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtStringLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagString;
 
-public final class NbtString extends Nbt<RefNbtTagString> {
+public final class NbtString extends Nbt<RefNbtTagString> implements NbtStringLike {
   private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtString EMPTY = new NbtString(OF_SUPPORTED
       ? RefNbtTagString.of("")

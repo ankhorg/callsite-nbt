@@ -10,8 +10,8 @@ java {
 }
 
 dependencies {
-  // compileOnly("bot.inker.ulmc.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
-  // compileOnly("bot.inker.ulmc.paper:paper:1.12.2-R0.1-SNAPSHOT")
+  compileOnly("bot.inker.ulmc.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
+  compileOnly("bot.inker.ulmc.paper:paper:1.12.2-R0.1-SNAPSHOT")
 
   // compileOnly("bot.inker.ulmc.paper:paper-api:1.13.2-R0.1-SNAPSHOT")
   // compileOnly("bot.inker.ulmc.paper:paper:1.13.2-R0.1-SNAPSHOT")

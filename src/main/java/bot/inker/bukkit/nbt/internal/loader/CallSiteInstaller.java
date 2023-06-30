@@ -39,6 +39,7 @@ public final class CallSiteInstaller {
   private static final String CSN_REF_PACKAGE;
   private static final String CSN_REF_CLASS_FILE_PREFIX;
   private static final boolean ENABLE_DEBUG;
+  private static Logger logger;
   private static boolean loaded = false;
   private static MethodHandles.Lookup lookup;
   private static TransformRemapper transformRemapper;
@@ -97,12 +98,12 @@ public final class CallSiteInstaller {
     try (InputStream in = delegateJarFile.getInputStream(delegateJarFile.getEntry("plugin.yml"))) {
       pluginYaml = new PluginDescriptionFile(in);
     }
+    logger = Logger.getLogger(pluginYaml.getName());
     if (!pluginYaml.getName().equals("callsite-nbt") && CallSiteNbt.class.getName().equals(new String(new char[]{
         'b', 'o', 't', '.', 'i', 'n', 'k', 'e', 'r', '.', 'b', 'u', 'k',
         'k', 'i', 't', '.', 'n', 'b', 't', '.', 'l', 'o', 'a', 'd', 'e',
         'r', '.', 'C', 'a', 'l', 'l', 'S', 'i', 't', 'e', 'N', 'b', 't'
     }))) {
-      Logger logger = Logger.getLogger(pluginYaml.getName());
       logger.warning("You should relocate callsite nbt to your package");
     }
     jarField.set(classLoader, new DelegateJarFile(pluginFile, pluginJar));
@@ -770,6 +771,14 @@ public final class CallSiteInstaller {
 
     public static <T> T throwException(String message) {
       throw new IllegalStateException(message);
+    }
+
+    public static <T, E extends Throwable> T throwException(Throwable e) throws E {
+      throw (E) e;
+    }
+
+    public static void info(String message) {
+      logger.info(message);
     }
   }
 }

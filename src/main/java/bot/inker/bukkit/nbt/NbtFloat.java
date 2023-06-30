@@ -1,9 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtFloatLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagFloat;
 
-public final class NbtFloat extends NbtNumeric<RefNbtTagFloat> {
+public final class NbtFloat extends NbtNumeric<RefNbtTagFloat> implements NbtFloatLike {
   private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtFloat ZERO = new NbtFloat(OF_SUPPORTED
       ? RefNbtTagFloat.of(0.0F)

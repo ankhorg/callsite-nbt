@@ -1,9 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtDoubleLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagDouble;
 
-public final class NbtDouble extends NbtNumeric<RefNbtTagDouble> {
+public final class NbtDouble extends NbtNumeric<RefNbtTagDouble> implements NbtDoubleLike {
   private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtDouble ZERO = new NbtDouble(OF_SUPPORTED
       ? RefNbtTagDouble.of(0.0)

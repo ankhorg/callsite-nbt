@@ -9,10 +9,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack")
 public final class RefCraftItemStack {
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;handle:Lnet/minecraft/server/v1_12_R1/ItemStack;", accessor = true)
-    public RefItemStack handle;
+    public RefNmsItemStack handle;
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;<init>(Lnet/minecraft/server/v1_12_R1/ItemStack;)V")
-    private RefCraftItemStack(RefItemStack item) {
+    private RefCraftItemStack(RefNmsItemStack item) {
         throw new UnsupportedOperationException();
     }
 
@@ -38,16 +38,16 @@ public final class RefCraftItemStack {
     public native void setItemMeta(ItemMeta itemMeta);
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asNMSCopy(Lorg/bukkit/inventory/ItemStack;)Lnet/minecraft/server/v1_12_R1/ItemStack;")
-    public static native RefItemStack asNMSCopy(ItemStack original);
+    public static native RefNmsItemStack asNMSCopy(ItemStack original);
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;copyNMSStack(Lnet/minecraft/server/v1_12_R1/ItemStack;I)Lnet/minecraft/server/v1_12_R1/ItemStack;")
-    public static native RefItemStack copyNMSStack(RefItemStack original, int amount);
+    public static native RefNmsItemStack copyNMSStack(RefNmsItemStack original, int amount);
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asBukkitCopy(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lorg/bukkit/inventory/ItemStack;")
-    public static native ItemStack asBukkitCopy(RefItemStack original);
+    public static native ItemStack asBukkitCopy(RefNmsItemStack original);
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asCraftMirror(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;")
-    public static native RefCraftItemStack asCraftMirror(RefItemStack original);
+    public static native RefCraftItemStack asCraftMirror(RefNmsItemStack original);
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asCraftCopy(Lorg/bukkit/inventory/ItemStack;)Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;")
     public static native RefCraftItemStack asCraftCopy(ItemStack original);

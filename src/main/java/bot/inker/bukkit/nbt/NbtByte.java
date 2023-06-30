@@ -1,9 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtByteLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagByte;
 
-public final class NbtByte extends NbtNumeric<RefNbtTagByte> {
+public final class NbtByte extends NbtNumeric<RefNbtTagByte> implements NbtByteLike {
   private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtByte[] instanceCache = buildInstanceCache();
   private static final NbtByte falseInstance = valueOf((byte) 0);
@@ -21,6 +22,10 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> {
           : new NbtByte(new RefNbtTagByte((byte) (i - 128)));
     }
     return result;
+  }
+
+  public boolean getAsBoolean() {
+    return getAsByte() != 0;
   }
 
   public static NbtByte valueOf(byte value) {

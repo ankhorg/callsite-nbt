@@ -1,9 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtLike;
 import bot.inker.bukkit.nbt.internal.loader.CallSiteInstaller;
 import bot.inker.bukkit.nbt.internal.ref.*;
 
-public abstract class Nbt<NMS extends RefNbtBase> {
+public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
   static {
     if (RefNbtBase.class.getName().equals("bot.inker.bukkit.nbt.loader.ref.RefNbtBase")) {
       CallSiteInstaller.Spy.throwException("CallSiteNbt loaded before CallSiteNbt installed, you should invoke CallSiteNbt#install before load it.");
@@ -18,43 +19,40 @@ public abstract class Nbt<NMS extends RefNbtBase> {
 
   @SuppressWarnings("unchecked")
   static <T extends RefNbtBase> Nbt<T> fromNms(T source) {
-    return (Nbt<T>) fromNmsImpl(source);
-  }
-
-  private static Nbt<?> fromNmsImpl(RefNbtBase source) {
     if (source == null) {
       return null;
     } else if (source instanceof RefNbtTagByte) {
-      return NbtByte.fromNmsImpl((RefNbtTagByte) source);
+      return (Nbt<T>) NbtByte.fromNmsImpl((RefNbtTagByte) source);
     } else if (source instanceof RefNbtTagByteArray) {
-      return new NbtByteArray((RefNbtTagByteArray) source);
+      return (Nbt<T>) new NbtByteArray((RefNbtTagByteArray) source);
     } else if (source instanceof RefNbtTagCompound) {
-      return new NbtCompound((RefNbtTagCompound) source);
+      return (Nbt<T>) new NbtCompound((RefNbtTagCompound) source);
     } else if (source instanceof RefNbtTagDouble) {
-      return NbtDouble.fromNmsImpl((RefNbtTagDouble) source);
+      return (Nbt<T>) NbtDouble.fromNmsImpl((RefNbtTagDouble) source);
     } else if (source instanceof RefNbtTagEnd) {
-      return NbtEnd.INSTANCE;
+      return (Nbt<T>) NbtEnd.INSTANCE;
     } else if (source instanceof RefNbtTagFloat) {
-      return NbtFloat.fromNmsImpl((RefNbtTagFloat) source);
+      return (Nbt<T>) NbtFloat.fromNmsImpl((RefNbtTagFloat) source);
     } else if (source instanceof RefNbtTagInt) {
-      return NbtInt.fromNmsImpl((RefNbtTagInt) source);
+      return (Nbt<T>) NbtInt.fromNmsImpl((RefNbtTagInt) source);
     } else if (source instanceof RefNbtTagIntArray) {
-      return new NbtIntArray((RefNbtTagIntArray) source);
+      return (Nbt<T>) new NbtIntArray((RefNbtTagIntArray) source);
     } else if (source instanceof RefNbtTagList) {
-      return new NbtList((RefNbtTagList) source);
+      return (Nbt<T>) new NbtList((RefNbtTagList) source);
     } else if (source instanceof RefNbtTagLong) {
-      return NbtLong.fromNmsImpl((RefNbtTagLong) source);
+      return (Nbt<T>) NbtLong.fromNmsImpl((RefNbtTagLong) source);
     } else if (source instanceof RefNbtTagLongArray) {
-      return new NbtLongArray((RefNbtTagLongArray) source);
+      return (Nbt<T>) new NbtLongArray((RefNbtTagLongArray) source);
     } else if (source instanceof RefNbtTagShort) {
-      return NbtShort.fromNmsImpl((RefNbtTagShort) source);
+      return (Nbt<T>) NbtShort.fromNmsImpl((RefNbtTagShort) source);
     } else if (source instanceof RefNbtTagString) {
-      return NbtString.fromNmsImpl((RefNbtTagString) source);
+      return (Nbt<T>) NbtString.fromNmsImpl((RefNbtTagString) source);
     } else {
       throw new UnsupportedOperationException("unknown source: " + source.getClass());
     }
   }
 
+  @Override
   public byte getId() {
     return delegate.getTypeId();
   }
@@ -82,6 +80,7 @@ public abstract class Nbt<NMS extends RefNbtBase> {
     return (NMS) delegate.rClone();
   }
 
+  @Override
   public String getAsString() {
     return delegate.asString();
   }

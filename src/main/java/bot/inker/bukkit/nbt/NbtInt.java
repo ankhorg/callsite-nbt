@@ -1,9 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.api.NbtIntLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagInt;
 
-public final class NbtInt extends NbtNumeric<RefNbtTagInt> {
+public final class NbtInt extends NbtNumeric<RefNbtTagInt> implements NbtIntLike {
   private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
   private static final NbtInt[] instanceCache = buildInstanceCache();
 

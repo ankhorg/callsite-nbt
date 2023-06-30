@@ -1,13 +1,12 @@
 package bot.inker.bukkit;
 
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.NBTTagLongArray;
+
 import java.util.StringJoiner;
 
 public class NmsMain {
   public static void main(String[] args) {
-    StringJoiner joiner = new StringJoiner(", ");
-    for (char c : "bot.inker.bukkit.nbt.loader.CallSiteNbt".toCharArray()) {
-      joiner.add("'" + c + "'");
-    }
-    System.out.println(joiner.toString());
+    NBTTagCompound
   }
 }
