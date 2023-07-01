@@ -240,7 +240,7 @@ public final class CallSiteInstaller {
     int secondSplitIndex = reference.indexOf('(', firstSplitIndex);
     Type ownerType = Type.getObjectType(reference.substring(1, firstSplitIndex));
     Type methodDesc = Type.getMethodType(reference.substring(secondSplitIndex));
-    if(!withFullRemap) {
+    if (!withFullRemap) {
       ownerType = remapType(ownerType);
       methodDesc = remapType(methodDesc);
     }
@@ -259,7 +259,7 @@ public final class CallSiteInstaller {
     int secondSplitIndex = reference.indexOf(':');
     Type ownerType = Type.getObjectType(reference.substring(1, firstSplitIndex));
     Type valueType = Type.getType(reference.substring(secondSplitIndex + 1));
-    if(!withFullRemap) {
+    if (!withFullRemap) {
       ownerType = remapType(ownerType);
       valueType = remapType(valueType);
     }
