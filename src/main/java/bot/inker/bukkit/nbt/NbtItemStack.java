@@ -49,7 +49,7 @@ public final class NbtItemStack {
       bukkitItemStack.meta = null;
       RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
       craftItemStack.handle.setTag(compound.delegate);
-      bukkitItemStack.meta = craftItemStack.getItemMeta();
+      bukkitItemStack.meta = ((ItemStack) (Object) craftItemStack).getItemMeta();
     } else {
       craftItemStack.handle.setTag(compound.delegate);
     }

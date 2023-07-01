@@ -2,9 +2,7 @@ package bot.inker.bukkit.nbt.internal.ref;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack")
 public final class RefCraftItemStack {
@@ -41,9 +39,4 @@ public final class RefCraftItemStack {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asNewCraftStack(Lnet/minecraft/server/v1_12_R1/Item;I)Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;")
   @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;asNewCraftStack(Lnet/minecraft/world/item/Item;I)Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;")
   public static native RefCraftItemStack asNewCraftStack(RefItem original, int amount);
-
-  public native ItemMeta getItemMeta();
-
-  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;setItemMeta(Lorg/bukkit/inventory/meta/ItemMeta;)Z")
-  public native void setItemMeta(ItemMeta itemMeta);
 }
