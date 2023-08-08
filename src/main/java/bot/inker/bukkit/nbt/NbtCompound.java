@@ -354,10 +354,10 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     for (String k : keys) {
       if (currentNbtCompound.hasKey(k)) {
         RefNbtBase obj = currentNbtCompound.get(k);
+        value = obj;
         if (obj instanceof RefNbtTagCompound) {
           currentNbtCompound = (RefNbtTagCompound) obj;
         } else {
-          value = obj;
           break;
         }
       } else {
@@ -533,7 +533,6 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         return;
       }
     }
-    return;
   }
 
   @Override
