@@ -18,7 +18,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
   }
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;map:Ljava/util/Map;", accessor = true)
-  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/CompoundTag;tags:Ljava/util/Map;")
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/CompoundTag;tags:Ljava/util/Map;", accessor = true)
   public Map<String, RefNbtBase> tags;
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;set(Ljava/lang/String;Lnet/minecraft/server/v1_12_R1/NBTBase;)V")
