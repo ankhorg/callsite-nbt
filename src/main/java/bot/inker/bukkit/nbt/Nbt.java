@@ -3,6 +3,7 @@ package bot.inker.bukkit.nbt;
 import bot.inker.bukkit.nbt.api.NbtLike;
 import bot.inker.bukkit.nbt.internal.loader.CallSiteInstaller;
 import bot.inker.bukkit.nbt.internal.ref.*;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
   static {
@@ -18,7 +19,7 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
   }
 
   @SuppressWarnings("unchecked")
-  static <T extends RefNbtBase> Nbt<T> fromNms(T source) {
+  static @Nullable <T extends RefNbtBase> Nbt<T> fromNms(@Nullable T source) {
     if (source == null) {
       return null;
     } else if (source instanceof RefNbtTagByte) {

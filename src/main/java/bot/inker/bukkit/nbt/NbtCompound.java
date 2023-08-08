@@ -297,7 +297,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public UUID getUUID(@NotNull String key, @Nullable UUID def) {
+  public @Nullable UUID getUUID(@NotNull String key, @Nullable UUID def) {
     RefNbtBase value = delegate.get(key);
     if (value instanceof RefNbtTagIntArray) {
       int[] ints = ((RefNbtTagIntArray) value).getInts();
@@ -334,7 +334,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public String getString(@NotNull String key, @Nullable String def) {
+  public @Nullable String getString(@NotNull String key, @Nullable String def) {
     RefNbtBase value = delegate.get(key);
     return (value != null)
             ? value.asString()
@@ -366,7 +366,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public NbtCompound getCompound(@NotNull String key, @Nullable NbtCompound def) {
+  public @Nullable NbtCompound getCompound(@NotNull String key, @Nullable NbtCompound def) {
     RefNbtBase value = delegate.get(key);
     return (value instanceof RefNbtTagCompound)
             ? new NbtCompound((RefNbtTagCompound) value)
@@ -389,7 +389,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public NbtList getList(@NotNull String key, @Nullable NbtList def) {
+  public @Nullable NbtList getList(@NotNull String key, @Nullable NbtList def) {
     RefNbtBase value = delegate.get(key);
     return (value instanceof RefNbtTagList)
             ? new NbtList((RefNbtTagList) value)
@@ -420,7 +420,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public NbtCompound clone() {
+  public @NotNull NbtCompound clone() {
     return new NbtCompound(cloneNms());
   }
 
@@ -448,7 +448,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public Nbt<?> getDeep(@NotNull String key) {
+  public @Nullable Nbt<?> getDeep(@NotNull String key) {
     return fromNms(getDeepRefNbt(key));
   }
 
@@ -501,7 +501,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public String getDeepString(@NotNull String key, @Nullable String def) {
+  public @Nullable String getDeepString(@NotNull String key, @Nullable String def) {
     RefNbtBase value = getDeepRefNbt(key);
     return value instanceof RefNbtTagString
             ? value.asString()
@@ -533,7 +533,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public NbtCompound getDeepCompound(@NotNull String key, @Nullable NbtCompound def) {
+  public @Nullable NbtCompound getDeepCompound(@NotNull String key, @Nullable NbtCompound def) {
     RefNbtBase value = getDeepRefNbt(key);
     return value instanceof RefNbtTagCompound
             ? new NbtCompound((RefNbtTagCompound) value)
@@ -541,7 +541,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public NbtList getDeepList(@NotNull String key, @Nullable NbtList def) {
+  public @Nullable NbtList getDeepList(@NotNull String key, @Nullable NbtList def) {
     RefNbtBase value = getDeepRefNbt(key);
     return value instanceof RefNbtTagList
             ? new NbtList((RefNbtTagList) value)
@@ -663,7 +663,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
    * @return this.
    */
   public NbtCompound coverWith(NbtCompound overlayCompound) {
-    NbtItemStack.coverWith(this.delegate, overlayCompound.delegate);
+    NbtUtils.coverWith(this.delegate, overlayCompound.delegate);
     return this;
   }
 }
