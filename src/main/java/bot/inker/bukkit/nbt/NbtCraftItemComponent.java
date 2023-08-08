@@ -5,6 +5,6 @@ import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
 
 public final class NbtCraftItemComponent extends NbtCompound implements NbtComponentLike {
   NbtCraftItemComponent(RefCraftItemStack itemStack) {
-    super(itemStack.handle.getTag());
+    super(NbtItemStack.getOrCreateTag(itemStack.handle));
   }
 }

@@ -1,10 +1,10 @@
 package bot.inker.bukkit.nbt;
 
 import bot.inker.bukkit.nbt.api.NbtComponentLike;
-import bot.inker.bukkit.nbt.internal.ref.RefBukkitItemStack;
-import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
-import bot.inker.bukkit.nbt.internal.ref.RefCraftMetaItem;
+import bot.inker.bukkit.nbt.internal.ref.*;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class NbtItemStack {
   private final ItemStack itemStack;
@@ -29,6 +29,7 @@ public final class NbtItemStack {
     }
   }
 
+  @Nullable
   public NbtCompound getTag() {
     if (craftItemStack == null) {
       RefCraftMetaItem meta = (RefCraftMetaItem) (Object) bukkitItemStack.meta;
@@ -40,11 +41,28 @@ public final class NbtItemStack {
         return compound;
       }
     } else {
-      return new NbtCompound(craftItemStack.handle.getTag());
+      RefNbtTagCompound tag = craftItemStack.handle.getTag();
+      return tag == null ? null : new NbtCompound(craftItemStack.handle.getTag());
     }
   }
 
-  public void setTag(NbtCompound compound) {
+  @NotNull
+  public NbtCompound getOrCreateTag() {
+    if (craftItemStack == null) {
+      RefCraftMetaItem meta = (RefCraftMetaItem) (Object) bukkitItemStack.meta;
+      if (meta == null) {
+        return new NbtCompound();
+      } else {
+        NbtCompound compound = new NbtCompound();
+        meta.applyToItem(compound.delegate);
+        return compound;
+      }
+    } else {
+      return new NbtCompound(getOrCreateTag(craftItemStack.handle));
+    }
+  }
+
+  public void setTag(@NotNull NbtCompound compound) {
     if (craftItemStack == null) {
       bukkitItemStack.meta = null;
       RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
@@ -90,5 +108,13 @@ public final class NbtItemStack {
   @Override
   public NbtItemStack clone() throws CloneNotSupportedException {
     return new NbtItemStack(itemStack.clone());
+  }
+
+  @NotNull
+  static public RefNbtTagCompound getOrCreateTag(@NotNull RefNmsItemStack itemStack) {
+    if (itemStack.getTag() == null) {
+      itemStack.setTag(new RefNbtTagCompound());
+    }
+    return itemStack.getTag();
   }
 }
