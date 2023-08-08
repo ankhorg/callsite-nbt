@@ -429,6 +429,21 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
   }
 
   /**
+   * 根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则设置并返回一个空 NbtCompound.
+   *
+   * @param key 要获取 NbtCompound 的 NBT键.
+   * @return 待查找的 NbtCompound.
+   */
+  default NbtCompound getOrCreateCompound(@NotNull String key) {
+    Nbt<?> value = get(key);
+    if (!(value instanceof NbtCompound)) {
+      value = new NbtCompound();
+      put(key, value);
+    }
+    return (NbtCompound) value;
+  }
+
+  /**
    * 根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回 null.
    *
    * @param key 要获取 NbtList 的 NBT键.
@@ -450,6 +465,21 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     return (value instanceof NbtList)
             ? (NbtList) value
             : def;
+  }
+
+  /**
+   * 根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则设置并返回一个空 NbtList.
+   *
+   * @param key 要获取 NbtList 的 NBT键.
+   * @return 待查找的 NbtList.
+   */
+  default NbtList getOrCreateList(@NotNull String key) {
+    Nbt<?> value = get(key);
+    if (!(value instanceof NbtList)) {
+      value = new NbtList();
+      put(key, value);
+    }
+    return (NbtList) value;
   }
 
   default NbtList getList(String key, int elementType) {

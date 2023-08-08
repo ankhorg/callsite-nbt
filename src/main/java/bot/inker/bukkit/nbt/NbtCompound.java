@@ -141,6 +141,14 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
   }
 
+  private void set(String key, RefNbtBase value) {
+    if (SET_RETURN_SUPPORT) {
+      delegate.set1(key, value);
+    } else {
+      delegate.set0(key, value);
+    }
+  }
+
   @Override
   public void putByte(String key, byte value) {
     delegate.setByte(key, value);
@@ -366,6 +374,16 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
+  public NbtCompound getOrCreateCompound(@NotNull String key) {
+    RefNbtBase value = delegate.get(key);
+    if (!(value instanceof RefNbtTagCompound)) {
+      value = new RefNbtTagCompound();
+      set(key, value);
+    }
+    return new NbtCompound((RefNbtTagCompound) value);
+  }
+
+  @Override
   public NbtList getList(String key, int elementType) {
     return new NbtList(delegate.getList(key, elementType));
   }
@@ -376,6 +394,16 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     return (value instanceof RefNbtTagList)
             ? new NbtList((RefNbtTagList) value)
             : def;
+  }
+
+  @Override
+  public NbtList getOrCreateList(@NotNull String key) {
+    RefNbtBase value = delegate.get(key);
+    if (!(value instanceof RefNbtTagList)) {
+      value = new RefNbtTagList();
+      set(key, value);
+    }
+    return new NbtList((RefNbtTagList) value);
   }
 
   @Override
