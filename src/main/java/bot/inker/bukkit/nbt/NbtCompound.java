@@ -374,7 +374,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public NbtCompound getOrCreateCompound(@NotNull String key) {
+  public @NotNull NbtCompound getOrCreateCompound(@NotNull String key) {
     RefNbtBase value = delegate.get(key);
     if (!(value instanceof RefNbtTagCompound)) {
       value = new RefNbtTagCompound();
@@ -397,7 +397,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
-  public NbtList getOrCreateList(@NotNull String key) {
+  public @NotNull NbtList getOrCreateList(@NotNull String key) {
     RefNbtBase value = delegate.get(key);
     if (!(value instanceof RefNbtTagList)) {
       value = new RefNbtTagList();
@@ -424,8 +424,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     return new NbtCompound(cloneNms());
   }
 
-  @Nullable
-  private RefNbtBase getDeepRefNbt(@NotNull String key) {
+  private @Nullable RefNbtBase getDeepRefNbt(@NotNull String key) {
     String[] keys = StringUtils.split(key, '.');
 
     RefNbtTagCompound currentNbtCompound = this.delegate;
