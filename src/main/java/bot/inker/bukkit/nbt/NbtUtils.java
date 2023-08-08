@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class NbtUtils {
-    public static @Nullable RefNbtTagCompound getOrCreateTag(@NotNull RefNmsItemStack itemStack) {
+    public static @NotNull RefNbtTagCompound getOrCreateTag(@NotNull RefNmsItemStack itemStack) {
         if (itemStack.getTag() == null) {
             itemStack.setTag(new RefNbtTagCompound());
         }
@@ -21,7 +21,7 @@ public class NbtUtils {
      * @param overlayCompound 用于提供覆盖值的 RefNbtTagCompound.
      * @return baseCompound.
      */
-    public static @Nullable RefNbtTagCompound coverWith(@NotNull RefNbtTagCompound baseCompound, @NotNull RefNbtTagCompound overlayCompound) {
+    public static @NotNull RefNbtTagCompound coverWith(@NotNull RefNbtTagCompound baseCompound, @NotNull RefNbtTagCompound overlayCompound) {
         // 遍历附加NBT
         overlayCompound.tags.forEach((key, value) -> {
             // 如果二者包含相同键

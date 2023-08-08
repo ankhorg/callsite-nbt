@@ -46,8 +46,7 @@ public final class NbtItemStack {
     }
   }
 
-  @NotNull
-  public NbtCompound getOrCreateTag() {
+  public @NotNull NbtCompound getOrCreateTag() {
     if (craftItemStack == null) {
       RefCraftMetaItem meta = (RefCraftMetaItem) (Object) bukkitItemStack.meta;
       if (meta == null) {

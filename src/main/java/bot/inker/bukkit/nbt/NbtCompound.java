@@ -662,7 +662,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
    * @param overlayCompound 用于提供覆盖值的 NbtCompound.
    * @return this.
    */
-  public NbtCompound coverWith(NbtCompound overlayCompound) {
+  public @NotNull NbtCompound coverWith(@NotNull NbtCompound overlayCompound) {
     NbtUtils.coverWith(this.delegate, overlayCompound.delegate);
     return this;
   }
