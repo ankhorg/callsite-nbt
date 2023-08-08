@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-public class LazyLoadEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
+public final class LazyLoadEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
   private final Map<K, V> loader;
   private final Set<K> keySet;
 

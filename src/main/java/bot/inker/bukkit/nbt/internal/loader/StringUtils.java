@@ -3,7 +3,7 @@ package bot.inker.bukkit.nbt.internal.loader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringUtils {
+public final class StringUtils {
   private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
   private StringUtils() {
