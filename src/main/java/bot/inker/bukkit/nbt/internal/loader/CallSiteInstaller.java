@@ -69,9 +69,10 @@ public final class CallSiteInstaller {
         throw new IllegalStateException("Failed to install CallSiteNbt", e);
       }
       Class<?>[] classes = new Class<?>[]{
-          Nbt.class, NbtByte.class, NbtByteArray.class, NbtCompound.class, NbtDouble.class, NbtEnd.class,
-          NbtFloat.class, NbtInt.class, NbtIntArray.class, NbtList.class, NbtLong.class, NbtLongArray.class,
-          NbtNumeric.class, NbtShort.class, NbtString.class
+          Nbt.class, NbtByte.class, NbtByteArray.class, NbtCompound.class, NbtCollection.class, NbtCompound.class,
+          NbtCraftItemComponent.class, NbtDouble.class, NbtEnd.class, NbtFloat.class, NbtInt.class, NbtIntArray.class,
+          NbtItemStack.class, NbtList.class, NbtLong.class, NbtLongArray.class, NbtNumeric.class, NbtShort.class,
+          NbtString.class, NbtType.class
       };
       for (Class<?> loadedClass : classes) {
         // ensure class loaded
@@ -463,6 +464,11 @@ public final class CallSiteInstaller {
     public void close() throws IOException {
       super.close();
       jarFile.close();
+    }
+
+    @Override
+    protected void finalize() throws IOException {
+      super.close();
     }
   }
 
