@@ -2,11 +2,11 @@ package bot.inker.bukkit.nbt;
 
 import bot.inker.bukkit.nbt.api.NbtComponentLike;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.loader.ArrayUtils;
 import bot.inker.bukkit.nbt.internal.loader.DelegateAbstractMap;
 import bot.inker.bukkit.nbt.internal.loader.LazyLoadEntrySet;
 import bot.inker.bukkit.nbt.internal.loader.StringUtils;
 import bot.inker.bukkit.nbt.internal.ref.*;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -647,5 +647,23 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   @Override
   public void putDeepLongArray(@NotNull String key, @NotNull List<Long> value, boolean force) {
     putDeepRefNbt(key, new RefNbtTagLongArray(value), force);
+  }
+
+  /**
+   * 将当前 NbtCompound 保存至对应的 ItemStack.
+   */
+  public void saveTo(@Nullable ItemStack itemStack) {
+    new NbtItemStack(itemStack).setTag(this);
+  }
+
+  /**
+   * 使用给定的 NbtCompound 覆盖当前 NbtCompound.
+   *
+   * @param overlayCompound 用于提供覆盖值的 NbtCompound.
+   * @return this.
+   */
+  public NbtCompound coverWith(NbtCompound overlayCompound) {
+    NbtItemStack.coverWith(this.delegate, overlayCompound.delegate);
+    return this;
   }
 }

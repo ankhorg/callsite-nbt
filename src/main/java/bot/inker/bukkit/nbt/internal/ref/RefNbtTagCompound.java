@@ -4,6 +4,7 @@ import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,6 +16,10 @@ public final class RefNbtTagCompound extends RefNbtBase {
   public RefNbtTagCompound() {
     throw new UnsupportedOperationException();
   }
+
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;map:Ljava/util/Map;", accessor = true)
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/nbt/CompoundTag;tags:Ljava/util/Map;")
+  public Map<String, RefNbtBase> tags;
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;set(Ljava/lang/String;Lnet/minecraft/server/v1_12_R1/NBTBase;)V")
   @HandleBy(version = CbVersion.v1_14_R1, reference = "")
