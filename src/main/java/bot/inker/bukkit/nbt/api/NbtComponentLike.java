@@ -124,50 +124,106 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
   }
 
   default byte getByte(String key) {
-    return ((NbtNumeric<?>) get(key)).getAsByte();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtNumeric<?>) {
+      return ((NbtNumeric<?>) get(key)).getAsByte();
+    } else {
+      return 0;
+    }
   }
 
   default short getShort(String key) {
-    return ((NbtNumeric<?>) get(key)).getAsShort();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtNumeric<?>) {
+      return ((NbtNumeric<?>) get(key)).getAsShort();
+    } else {
+      return 0;
+    }
   }
 
   default int getInt(String key) {
-    return ((NbtNumeric<?>) get(key)).getAsInt();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtNumeric<?>) {
+      return ((NbtNumeric<?>) get(key)).getAsInt();
+    } else {
+      return 0;
+    }
   }
 
   default long getLong(String key) {
-    return ((NbtNumeric<?>) get(key)).getAsLong();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtNumeric<?>) {
+      return ((NbtNumeric<?>) get(key)).getAsLong();
+    } else {
+      return 0;
+    }
   }
 
+  @Nullable
   default UUID getUUID(String key) {
-    return new UUID(
+    Nbt<?> most = get(key + "Most");
+    Nbt<?> least = get(key + "Least");
+    if (most instanceof NbtNumeric<?> && least instanceof NbtNumeric<?>) {
+      return new UUID(
         ((NbtNumeric<?>) get(key + "Most")).getAsLong(),
         ((NbtNumeric<?>) get(key + "Least")).getAsLong()
-    );
+      );
+    }
+    return null;
   }
 
   default float getFloat(String key) {
-    return ((NbtNumeric<?>) get(key)).getAsFloat();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtNumeric<?>) {
+      return ((NbtNumeric<?>) get(key)).getAsFloat();
+    } else {
+      return 0;
+    }
   }
 
   default double getDouble(String key) {
-    return ((NbtNumeric<?>) get(key)).getAsDouble();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtNumeric<?>) {
+      return ((NbtNumeric<?>) get(key)).getAsDouble();
+    } else {
+      return 0;
+    }
   }
 
+  @Nullable
   default String getString(String key) {
-    return get(key).getAsString();
+    Nbt<?> nbt = get(key);
+    if (nbt != null) {
+      return get(key).getAsString();
+    }
+    return null;
   }
 
   default byte[] getByteArray(String key) {
-    return ((NbtByteArray) get(key)).getAsByteArray();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtByteArray) {
+      return ((NbtByteArray) get(key)).getAsByteArray();
+    } else {
+      return ArrayUtils.EMPTY_BYTE_ARRAY;
+    }
   }
 
   default int[] getIntArray(String key) {
-    return ((NbtIntArray) get(key)).getAsIntArray();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtIntArray) {
+      return ((NbtIntArray) get(key)).getAsIntArray();
+    } else {
+      return ArrayUtils.EMPTY_INT_ARRAY;
+    }
   }
 
   default long[] getLongArray(String key) {
-    return ((NbtLongArray) get(key)).getAsLongArray();
+    Nbt<?> nbt = get(key);
+    if (nbt instanceof NbtLongArray) {
+      return ((NbtLongArray) get(key)).getAsLongArray();
+    } else {
+      return ArrayUtils.EMPTY_LONG_ARRAY;
+    }
   }
 
   default NbtCompound getCompound(String key) {
