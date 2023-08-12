@@ -107,7 +107,7 @@ public final class CallSiteInstaller {
     }))) {
       logger.warning("You should relocate callsite nbt to your package");
     }
-    jarField.set(classLoader, new DelegateJarFile(pluginFile, pluginJar));
+    jarField.set(classLoader, delegateJarFile);
 
     CallSiteInstaller.remapping = provideRemapping();
     CallSiteInstaller.lookup = provideLookup();
@@ -464,11 +464,6 @@ public final class CallSiteInstaller {
     public void close() throws IOException {
       super.close();
       jarFile.close();
-    }
-
-    @Override
-    protected void finalize() throws IOException {
-      super.close();
     }
   }
 
