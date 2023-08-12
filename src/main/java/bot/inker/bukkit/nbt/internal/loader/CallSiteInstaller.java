@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
@@ -46,19 +47,23 @@ public final class CallSiteInstaller {
   private static Map<String, String> remapping;
 
   static {
+    //noinspection StringOperationCanBeSimplified
     CSN_PACKAGE = new String("bot.inker.bukkit.nbt.");
     CSN_CLASS_FILE_PREFIX = CSN_PACKAGE.replace('.', '/');
 
+    //noinspection StringOperationCanBeSimplified
     CSN_LOADER_PACKAGE = new String("bot.inker.bukkit.nbt.loader.");
     CSN_LOADER_CLASS_FILE_PREFIX = CSN_LOADER_PACKAGE.replace('.', '/');
 
+    //noinspection StringOperationCanBeSimplified
     CSN_INTERNAL_PACKAGE = new String("bot.inker.bukkit.nbt.internal.");
     CSN_INTERNAL_CLASS_FILE_PREFIX = CSN_INTERNAL_PACKAGE.replace('.', '/');
 
+    //noinspection StringOperationCanBeSimplified
     CSN_REF_PACKAGE = new String("bot.inker.bukkit.nbt.internal.ref.");
     CSN_REF_CLASS_FILE_PREFIX = CSN_REF_PACKAGE.replace('.', '/');
 
-    ENABLE_DEBUG = "false".equals(System.getProperty(CSN_PACKAGE) + "debug");
+    ENABLE_DEBUG = Boolean.getBoolean(CSN_PACKAGE + "debug");
   }
 
   public static void install(Class<?> clazz) {
@@ -100,6 +105,7 @@ public final class CallSiteInstaller {
       pluginYaml = new PluginDescriptionFile(in);
     }
     logger = Logger.getLogger(pluginYaml.getName());
+    logger.log(Level.INFO, "install callsite-nbt in " + CSN_PACKAGE);
     if (!pluginYaml.getName().equals("callsite-nbt") && CallSiteNbt.class.getName().equals(new String(new char[]{
         'b', 'o', 't', '.', 'i', 'n', 'k', 'e', 'r', '.', 'b', 'u', 'k',
         'k', 'i', 't', '.', 'n', 'b', 't', '.', 'l', 'o', 'a', 'd', 'e',
@@ -434,7 +440,7 @@ public final class CallSiteInstaller {
           bytes = readAllBytes(in);
         }
         bytes = transformBaseClass(bytes);
-        if (true) {
+        if (ENABLE_DEBUG) {
           Path dumpPath = Paths.get("callsite-nbt", ze.getName());
           Files.createDirectories(dumpPath.getParent());
           Files.write(dumpPath, bytes);
@@ -726,22 +732,27 @@ public final class CallSiteInstaller {
         int opcode,
         String owner,
         String describe
-    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {
-      Class<?> caller = callerLookup.lookupClass();
-      ClassLoader classLoader = caller.getClassLoader();
-      Class<?> ownerClass = Class.forName(owner.replace('/', '.'), false, classLoader);
-      if (opcode == Opcodes.INVOKEVIRTUAL
-          || opcode == Opcodes.INVOKESPECIAL
-          || opcode == Opcodes.INVOKESTATIC
-          || opcode == Opcodes.INVOKEINTERFACE) {
-        return bootstrapMethod(caller, type, classLoader, ownerClass, name, describe, opcode);
-      } else if (opcode == Opcodes.GETSTATIC
-          || opcode == Opcodes.PUTSTATIC
-          || opcode == Opcodes.GETFIELD
-          || opcode == Opcodes.PUTFIELD) {
-        return bootstrapField(caller, type, classLoader, ownerClass, name, describe, opcode);
-      } else {
-        throw new IllegalStateException("Unsupported bootstrap opcode: " + opcode);
+    ) throws Exception {
+      try {
+        Class<?> caller = callerLookup.lookupClass();
+        ClassLoader classLoader = caller.getClassLoader();
+        Class<?> ownerClass = Class.forName(owner.replace('/', '.'), false, classLoader);
+        if (opcode == Opcodes.INVOKEVIRTUAL
+            || opcode == Opcodes.INVOKESPECIAL
+            || opcode == Opcodes.INVOKESTATIC
+            || opcode == Opcodes.INVOKEINTERFACE) {
+          return bootstrapMethod(caller, type, classLoader, ownerClass, name, describe, opcode);
+        } else if (opcode == Opcodes.GETSTATIC
+            || opcode == Opcodes.PUTSTATIC
+            || opcode == Opcodes.GETFIELD
+            || opcode == Opcodes.PUTFIELD) {
+          return bootstrapField(caller, type, classLoader, ownerClass, name, describe, opcode);
+        } else {
+          throw new IllegalStateException("Unsupported bootstrap opcode: " + opcode);
+        }
+      } catch (Exception e) {
+        logger.log(Level.SEVERE, "failed to bootstrap method(owner=" + owner + ",name=" + name + ",type=" + type + ")");
+        throw e;
       }
     }
 
