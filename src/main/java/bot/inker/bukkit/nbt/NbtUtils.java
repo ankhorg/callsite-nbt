@@ -1,8 +1,10 @@
 package bot.inker.bukkit.nbt;
 
+import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtBase;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,5 +45,14 @@ public class NbtUtils {
             }
         });
         return baseCompound;
+    }
+
+    /**
+     * 检测给定的 ItemStack 实例是否属于 CraftItemStack 子类.
+     *
+     * @return 检测结果.
+     */
+    public static boolean isCraftItemStack(@NotNull ItemStack itemStack) {
+        return (Object) itemStack instanceof RefCraftItemStack;
     }
 }
