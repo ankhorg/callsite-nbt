@@ -21,9 +21,12 @@ public class BlobMap extends AbstractMap {
     super(classNodeMap);
   }
 
+  private static boolean isAcceptClass(String name) {
+    return name.startsWith("net/minecraft/nbt/") || name.startsWith("net/minecraft/world/item/ItemStack");
+  }
   private void buildConstPool() {
     for (Map.Entry<String, ClassNode> classEntry : classNodeMap().entrySet()) {
-      if (!classEntry.getValue().raw().startsWith("net/minecraft/nbt/")) {
+      if (!isAcceptClass(classEntry.getValue().raw())) {
         continue;
       }
       registerConstPool(classEntry.getValue().raw());
@@ -80,17 +83,17 @@ public class BlobMap extends AbstractMap {
 
     out.writeInt((int) classNodeMap().entrySet()
         .stream()
-        .filter(it -> it.getValue().raw().startsWith("net/minecraft/nbt/"))
+        .filter(it -> isAcceptClass(it.getValue().raw()))
         .count());
     for (Map.Entry<String, ClassNode> classEntry : classNodeMap().entrySet()) {
-      if (!classEntry.getValue().raw().startsWith("net/minecraft/nbt/")) {
+      if (!isAcceptClass(classEntry.getValue().raw())) {
         continue;
       }
       out.writeInt(getConstPool(classEntry.getValue().raw()));
       out.writeInt(getConstPool(classEntry.getValue().remapped()));
     }
     for (Map.Entry<String, ClassNode> classEntry : classNodeMap().entrySet()) {
-      if (!classEntry.getValue().raw().startsWith("net/minecraft/nbt/")) {
+      if (!isAcceptClass(classEntry.getValue().raw())) {
         continue;
       }
       out.writeInt(classEntry.getValue().fieldMap().size());
