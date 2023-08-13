@@ -14,5 +14,6 @@ public final class RefCraftMetaItem {
   public Map<String, RefNbtBase> unhandledTags;
 
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftMetaItem;applyToItem(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", accessor = true)
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftMetaItem;applyToItem(Lnet/minecraft/nbt/CompoundTag;)V", accessor = true)
   public native void applyToItem(RefNbtTagCompound itemTag);
 }
