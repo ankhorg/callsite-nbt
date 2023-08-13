@@ -751,7 +751,7 @@ public final class CallSiteInstaller {
           throw new IllegalStateException("Unsupported bootstrap opcode: " + opcode);
         }
       } catch (Exception e) {
-        logger.log(Level.SEVERE, "failed to bootstrap method(owner=" + owner + ",name=" + name + ",type=" + type + ")");
+        logger.log(Level.SEVERE, "failed to bootstrap method(owner=" + owner + ",name=" + name + ",type=" + type + ")", e);
         throw e;
       }
     }

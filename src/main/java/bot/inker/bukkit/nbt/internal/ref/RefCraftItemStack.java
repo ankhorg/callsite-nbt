@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack")
 public final class RefCraftItemStack {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;handle:Lnet/minecraft/server/v1_12_R1/ItemStack;", accessor = true)
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;handle:Lnet/minecraft/world/item/ItemStack;", accessor = true)
   public RefNmsItemStack handle;
 
   private RefCraftItemStack() {
