@@ -742,7 +742,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
    */
   default @Nullable String getDeepString(@NotNull String key, @Nullable String def) {
     Nbt<?> value = getDeep(key);
-    return (value instanceof NbtString)
+    return (value != null)
             ? value.getAsString()
             : def;
   }

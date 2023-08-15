@@ -506,7 +506,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   @Override
   public @Nullable String getDeepString(@NotNull String key, @Nullable String def) {
     RefNbtBase value = getDeepRefNbt(key);
-    return value instanceof RefNbtTagString
+    return value != null
             ? value.asString()
             : def;
   }
