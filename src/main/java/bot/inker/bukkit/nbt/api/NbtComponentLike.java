@@ -514,16 +514,19 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     Nbt<?> value = null;
 
     for (String k : keys) {
+      if (currentNbtCompound == null) {
+        return null;
+      }
       if (currentNbtCompound.containsKey(k)) {
         Nbt<?> obj = currentNbtCompound.get(k);
         value = obj;
         if (obj instanceof NbtComponentLike) {
           currentNbtCompound = (NbtComponentLike) obj;
         } else {
-          break;
+          currentNbtCompound = null;
         }
       } else {
-        break;
+        return null;
       }
     }
 
