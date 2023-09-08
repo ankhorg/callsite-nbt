@@ -49,25 +49,31 @@ dependencies {
 
 tasks.create<ProcessJarTask>("processJar") {
   addSpigotBuildInfo(
-    "v1_17",
+    "v1_17_R1",
     "https://launcher.mojang.com/v1/objects/f6cae1c5c1255f68ba4834b16a0da6a09621fe13/server.txt",
     "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.17.1-cl.csrg?at=a4785704979a469daa2b7f6826c84e7fe886bb03",
     "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.17.1-members.csrg?at=a4785704979a469daa2b7f6826c84e7fe886bb03"
   )
   addSpigotBuildInfo(
-    "v1_18",
+    "v1_18_R2",
     "https://launcher.mojang.com/v1/objects/e562f588fea155d96291267465dc3323bfe1551b/server.txt",
     "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.18.2-cl.csrg?at=641cb0c939c7c2a3c4b42f2fd7bca7c8b34254ae",
     null
   )
   addSpigotBuildInfo(
-    "v1_19",
+    "v1_19_R1",
+    "https://piston-data.mojang.com/v1/objects/ed5e6e8334ad67f5af0150beed0f3d156d74bd57/server.txt",
+    "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.19.2-cl.csrg?at=d96ad8e1e64b7c35bb632339c23621353be1f028",
+    null
+  )
+  addSpigotBuildInfo(
+    "v1_19_R3",
     "https://piston-data.mojang.com/v1/objects/73c8bb982e420b33aad9632b482608c5c33e2d13/server.txt",
     "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.19.4-cl.csrg?at=4d9436f7b66190ad21fe4e3975b73a36b7ad2a7e",
     null
   )
   addSpigotBuildInfo(
-    "v1_20",
+    "v1_20_R1",
     "https://piston-data.mojang.com/v1/objects/0b4dba049482496c507b2387a73a913230ebbd76/server.txt",
     "https://hub.spigotmc.org/stash/projects/SPIGOT/repos/builddata/raw/mappings/bukkit-1.20.1-cl.csrg?at=faff587dcbe915bc565bf01f2d54c6af86039414",
     null

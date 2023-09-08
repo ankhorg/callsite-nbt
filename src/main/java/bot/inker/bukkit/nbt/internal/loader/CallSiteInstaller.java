@@ -126,7 +126,7 @@ public final class CallSiteInstaller {
       String currentVersion = CbVersion.current().name();
 
       mappingContent = (String) Class.forName("bot.inker.bukkit.nbt.internal.loader.ConstMappings")
-          .getDeclaredField(currentVersion.substring(0, currentVersion.length() - 3))
+          .getDeclaredField(currentVersion)
           .get(null);
     } catch (NoSuchFieldException e) {
       if (CbVersion.v1_17_R1.isSupport()) {
