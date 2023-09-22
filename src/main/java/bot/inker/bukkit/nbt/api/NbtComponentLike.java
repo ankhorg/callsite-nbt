@@ -657,13 +657,21 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
    * @return 待查找的 UUID.
    */
   default @Nullable UUID getDeepUUID(@NotNull String key, @Nullable UUID def) {
-    Nbt<?> most = getDeep(key + "Most");
-    Nbt<?> least = getDeep(key + "Least");
-    if (most instanceof NbtNumeric<?> && least instanceof NbtNumeric<?>) {
-      return new UUID(
-              ((NbtNumeric<?>) get(key + "Most")).getAsLong(),
-              ((NbtNumeric<?>) get(key + "Least")).getAsLong()
-      );
+    Nbt<?> value = getDeep(key);
+    if (value instanceof NbtIntArray) {
+      int[] ints = ((NbtIntArray) value).getAsIntArray();
+      if (ints.length == 4) {
+        return new UUID((long)ints[0] << 32 | (long)ints[1] & 4294967295L, (long)ints[2] << 32 | (long)ints[3] & 4294967295L);
+      }
+    } else {
+      Nbt<?> most = getDeep(key + "Most");
+      Nbt<?> least = getDeep(key + "Least");
+      if (most instanceof NbtNumeric<?> && least instanceof NbtNumeric<?>) {
+        return new UUID(
+                ((NbtNumeric<?>) most).getAsLong(),
+                ((NbtNumeric<?>) least).getAsLong()
+        );
+      }
     }
     return def;
   }

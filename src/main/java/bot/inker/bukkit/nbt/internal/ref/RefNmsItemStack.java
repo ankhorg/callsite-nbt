@@ -30,4 +30,8 @@ public final class RefNmsItemStack {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;setTag(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V")
   @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/ItemStack;setTag(Lnet/minecraft/nbt/CompoundTag;)V")
   public native void setTag(RefNbtTagCompound nbt);
+
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;getItem()Lnet/minecraft/server/v1_12_R1/Item;")
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;")
+  public native RefItem getItem();
 }

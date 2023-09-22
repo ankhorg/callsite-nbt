@@ -488,6 +488,27 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
   }
 
   @Override
+  public @Nullable UUID getDeepUUID(@NotNull String key, @Nullable UUID def) {
+    RefNbtBase value = getDeepRefNbt(key);
+    if (value instanceof RefNbtTagIntArray) {
+      int[] ints = ((RefNbtTagIntArray) value).getInts();
+      if (ints.length == 4) {
+        return new UUID((long) ints[0] << 32 | (long) ints[1] & 4294967295L, (long) ints[2] << 32 | (long) ints[3] & 4294967295L);
+      }
+    } else {
+      RefNbtBase most = getDeepRefNbt(key + "Most");
+      RefNbtBase least = getDeepRefNbt(key + "Least");
+      if (most instanceof RefNbtNumber && least instanceof RefNbtNumber) {
+        return new UUID(
+                ((RefNbtNumber) most).asLong(),
+                ((RefNbtNumber) least).asLong()
+        );
+      }
+    }
+    return def;
+  }
+
+  @Override
   public float getDeepFloat(@NotNull String key, float def) {
     RefNbtBase value = getDeepRefNbt(key);
     return value instanceof RefNbtNumber
