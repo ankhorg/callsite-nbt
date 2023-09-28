@@ -675,6 +675,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
   /**
    * 将当前 NbtCompound 保存至对应的 ItemStack.
+   *
+   * @param itemStack 用于接收 NbtCompound 的 ItemStack.
    */
   public void saveTo(@Nullable ItemStack itemStack) {
     new NbtItemStack(itemStack).setTag(this);

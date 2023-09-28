@@ -1,12 +1,11 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
-import bot.inker.bukkit.nbt.internal.ref.RefNbtBase;
-import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
-import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
+import bot.inker.bukkit.nbt.internal.ref.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class NbtUtils {
     public static @NotNull RefNbtTagCompound getOrCreateTag(@NotNull RefNmsItemStack itemStack) {
@@ -54,5 +53,37 @@ public class NbtUtils {
      */
     public static boolean isCraftItemStack(@NotNull ItemStack itemStack) {
         return (Object) itemStack instanceof RefCraftItemStack;
+    }
+
+    public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
+        ItemStack result = itemStack.clone();
+        RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) ((RefBukkitItemStack) (Object)result).meta;
+        Map<String, RefNbtBase> unhandledTags = refItemMeta.unhandledTags;
+        unhandledTags.forEach((key, value) -> unhandledTags.put(key, value.rClone()));
+        return result;
+    }
+
+    public static ItemStack asCopy(@NotNull ItemStack itemStack) {
+        if ((Object) itemStack instanceof RefCraftItemStack) {
+            return itemStack.clone();
+        } else {
+            return bukkitCopy(itemStack);
+        }
+    }
+
+    public static ItemStack asBukkitCopy(@NotNull ItemStack itemStack) {
+        if ((Object) itemStack instanceof RefCraftItemStack) {
+            return RefCraftItemStack.asBukkitCopy(((RefCraftItemStack) (Object) itemStack).handle);
+        } else {
+            return bukkitCopy(itemStack);
+        }
+    }
+
+    public static ItemStack asCraftCopy(@NotNull ItemStack itemStack) {
+        if ((Object) itemStack instanceof RefCraftItemStack) {
+            return itemStack.clone();
+        } else {
+            return (ItemStack) (Object) RefCraftItemStack.asCraftCopy(itemStack);
+        }
     }
 }

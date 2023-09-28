@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public final class NbtItemStack {
   private final ItemStack itemStack;
   private final RefBukkitItemStack bukkitItemStack;
@@ -89,7 +91,11 @@ public final class NbtItemStack {
   }
 
   public ItemStack asCopy() {
-    return itemStack.clone();
+    if (craftItemStack == null) {
+      return NbtUtils.bukkitCopy(itemStack);
+    } else {
+      return itemStack.clone();
+    }
   }
 
   public boolean isBukkitItemStack() {
