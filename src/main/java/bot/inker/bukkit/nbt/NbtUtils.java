@@ -9,6 +9,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class NbtUtils {
+    /**
+     * 获取物品NBT, 如果物品没有NBT就创建一个空NBT, 设置并返回.
+     *
+     * @param itemStack 待获取NBT的物品.
+     * @return 物品NBT.
+     */
     public static @NotNull RefNbtTagCompound getOrCreateTag(@NotNull RefNmsItemStack itemStack) {
         if (itemStack.getTag() == null) {
             itemStack.setTag(new RefNbtTagCompound());
@@ -56,6 +62,14 @@ public class NbtUtils {
         return (Object) itemStack instanceof RefCraftItemStack;
     }
 
+    /**
+     * 仅可用于 org.bukkit.inventory.ItemStack, 不可用于 CraftItemStack.
+     * 获取给定物品的克隆, 返回值为 ItemStack.
+     * 修复了 org.bukkit.inventory.ItemStack#clone 在克隆 CraftMetaItem 时对 unhandledTags 浅复制的问题.
+     *
+     * @param itemStack 待操作物品.
+     * @return 物品克隆.
+     */
     public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
         ItemStack result = itemStack.clone();
         RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) ((RefBukkitItemStack) (Object)result).meta;
@@ -65,6 +79,13 @@ public class NbtUtils {
         return result;
     }
 
+    /**
+     * 获取给定物品的克隆, 返回值有可能为 ItemStack 或 CraftItemStack.
+     * 修复了 org.bukkit.inventory.ItemStack#clone 在克隆 CraftMetaItem 时对 unhandledTags 浅复制的问题.
+     *
+     * @param itemStack 待操作物品.
+     * @return 物品克隆.
+     */
     public static ItemStack asCopy(@NotNull ItemStack itemStack) {
         if ((Object) itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();
@@ -73,6 +94,13 @@ public class NbtUtils {
         }
     }
 
+    /**
+     * 将给定的物品转换为 org.bukkit.inventory.ItemStack 形式的克隆.
+     * 给定物品可能属于 ItemStack, 也可能属于 ItemStack 在 OBC 的子类 CraftItemStack.
+     *
+     * @param itemStack 待操作物品.
+     * @return org.bukkit.inventory.ItemStack 形式的物品克隆.
+     */
     public static ItemStack asBukkitCopy(@NotNull ItemStack itemStack) {
         if ((Object) itemStack instanceof RefCraftItemStack) {
             return RefCraftItemStack.asBukkitCopy(((RefCraftItemStack) (Object) itemStack).handle);
@@ -81,6 +109,13 @@ public class NbtUtils {
         }
     }
 
+    /**
+     * 将给定的物品转换为 CraftItemStack 形式的克隆.
+     * 给定物品可能属于 ItemStack, 也可能属于 ItemStack 在 OBC 的子类 CraftItemStack.
+     *
+     * @param itemStack 待操作物品.
+     * @return CraftItemStack 形式的物品克隆.
+     */
     public static ItemStack asCraftCopy(@NotNull ItemStack itemStack) {
         if ((Object) itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();
