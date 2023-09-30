@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.Map;
 
 public final class NbtItemStack {
@@ -40,6 +41,16 @@ public final class NbtItemStack {
       } else {
         NbtCompound compound = new NbtCompound();
         meta.applyToItem(compound.delegate);
+        Map<String, RefNbtBase> tags = compound.delegate.tags;
+        for (Map.Entry<String, RefNbtBase> entry : tags.entrySet()) {
+          String key = entry.getKey();
+          RefNbtBase value = entry.getValue();
+          // applyToItem 直接把 unhandledTags 丢进去了, 这样是不行的, 必须 clone 一下
+          if (!RefCraftMetaItem.HANDLED_TAGS.contains(key)
+                  && (value instanceof RefNbtTagCompound || value instanceof RefNbtTagList)) {
+            tags.put(key, value.rClone());
+          }
+        }
         return compound;
       }
     } else {
