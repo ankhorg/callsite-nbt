@@ -3,10 +3,8 @@ package bot.inker.bukkit.nbt;
 import bot.inker.bukkit.nbt.internal.ref.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.TreeMap;
 
 public class NbtUtils {
     /**
@@ -73,9 +71,16 @@ public class NbtUtils {
     public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
         ItemStack result = itemStack.clone();
         RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) ((RefBukkitItemStack) (Object)result).meta;
-        Map<String, RefNbtBase> unhandledTags = new TreeMap();
-        refItemMeta.unhandledTags.forEach((key, value) -> unhandledTags.put(key, value.rClone()));
-        refItemMeta.unhandledTags = unhandledTags;
+        if (refItemMeta != null) {
+            try {
+                // paper用的TreeMap, spigot用的HashMap
+                Map<String, RefNbtBase> unhandledTags = refItemMeta.unhandledTags.getClass().newInstance();
+                refItemMeta.unhandledTags.forEach((key, value) -> unhandledTags.put(key, value.rClone()));
+                refItemMeta.unhandledTags = unhandledTags;
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
         return result;
     }
 
