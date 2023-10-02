@@ -22,7 +22,12 @@ public class BlobMap extends AbstractMap {
   }
 
   private static boolean isAcceptClass(String name) {
-    return name.startsWith("net/minecraft/nbt/") || name.startsWith("net/minecraft/world/item/ItemStack");
+    return name.startsWith("net/minecraft/nbt/")
+            || name.startsWith("net/minecraft/world/item/ItemStack")
+            || name.startsWith("net/minecraft/world/entity/Entity")
+            || name.startsWith("net/minecraft/world/level/Level")
+            || name.startsWith("net/minecraft/server/level/ServerLevel")
+            || name.startsWith("net/minecraft/world/entity/item/ItemEntity");
   }
   private void buildConstPool() {
     for (Map.Entry<String, ClassNode> classEntry : classNodeMap().entrySet()) {

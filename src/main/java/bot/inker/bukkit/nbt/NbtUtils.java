@@ -54,6 +54,7 @@ public class NbtUtils {
     /**
      * 检测给定的 ItemStack 实例是否属于 CraftItemStack 子类.
      *
+     * @param itemStack 待检测物品.
      * @return 检测结果.
      */
     public static boolean isCraftItemStack(@NotNull ItemStack itemStack) {
