@@ -23,11 +23,24 @@ public class BlobMap extends AbstractMap {
 
   private static boolean isAcceptClass(String name) {
     return name.startsWith("net/minecraft/nbt/")
+            || name.startsWith("net/minecraft/network/PacketListener")
+            || name.startsWith("net/minecraft/network/protocol/Packet")
+            || name.startsWith("net/minecraft/network/protocol/game/ClientGamePacketListener")
+            || name.startsWith("net/minecraft/network/protocol/game/ClientboundAnimatePacket")
+            || name.startsWith("net/minecraft/world/InteractionResult")
+            || name.startsWith("net/minecraft/world/InteractionHand")
+            || name.startsWith("net/minecraft/world/item/Item")
             || name.startsWith("net/minecraft/world/item/ItemStack")
             || name.startsWith("net/minecraft/world/entity/Entity")
+            || name.startsWith("net/minecraft/world/entity/LivingEntity")
+            || name.startsWith("net/minecraft/world/entity/player/Player")
+            || name.startsWith("net/minecraft/world/entity/item/ItemEntity")
             || name.startsWith("net/minecraft/world/level/Level")
+            || name.startsWith("net/minecraft/world/level/ItemLike")
             || name.startsWith("net/minecraft/server/level/ServerLevel")
-            || name.startsWith("net/minecraft/world/entity/item/ItemEntity");
+            || name.startsWith("net/minecraft/server/level/ServerPlayer")
+            || name.startsWith("net/minecraft/server/level/ServerPlayerGameMode")
+            || name.startsWith("net/minecraft/server/network/ServerGamePacketListenerImpl");
   }
   private void buildConstPool() {
     for (Map.Entry<String, ClassNode> classEntry : classNodeMap().entrySet()) {
