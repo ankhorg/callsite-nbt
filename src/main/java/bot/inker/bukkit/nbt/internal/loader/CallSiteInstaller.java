@@ -541,7 +541,7 @@ public final class CallSiteInstaller {
     private Executable fetchRefMethod(String owner, String name, String descriptor) {
       Class<?> clazz = fetchRefClass(owner);
       boolean isInit = name.equals("<init>");
-      for (Executable method : isInit ? clazz.getConstructors() : clazz.getMethods()) {
+      for (Executable method : isInit ? clazz.getDeclaredConstructors() : clazz.getMethods()) {
         Type methodType = isInit ? Type.getType((Constructor<?>) method) : Type.getType((Method) method);
         if ((isInit || method.getName().equals(name)) && methodType.getDescriptor().equals(descriptor)) {
           return method;
