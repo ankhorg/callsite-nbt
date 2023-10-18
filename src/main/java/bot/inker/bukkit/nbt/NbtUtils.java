@@ -2,7 +2,9 @@ package bot.inker.bukkit.nbt;
 
 import bot.inker.bukkit.nbt.internal.ref.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -59,6 +61,23 @@ public class NbtUtils {
      */
     public static boolean isCraftItemStack(@NotNull ItemStack itemStack) {
         return (Object) itemStack instanceof RefCraftItemStack;
+    }
+
+    /**
+     * 通过给定的 ItemStack 实例获取 ItemStack.
+     * org.bukkit.inventory.ItemStack 将返回 ItemMeta 原本
+     * org.bukkit.craftbukkit.xxx.inventory.CraftItemStack 将返回 ItemMeta 副本
+     *
+     * @param itemStack 待获取物品.
+     * @return ItemMeta.
+     */
+    @Nullable
+    public static ItemMeta getItemMeta(@NotNull ItemStack itemStack) {
+        if ((Object) itemStack instanceof RefCraftItemStack) {
+            return itemStack.getItemMeta();
+        } else {
+            return ((RefBukkitItemStack) (Object) itemStack).meta;
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package bot.inker.bukkit.nbt.internal.ref;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack")
 public final class RefCraftItemStack {
