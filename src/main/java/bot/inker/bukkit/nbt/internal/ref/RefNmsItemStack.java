@@ -34,4 +34,13 @@ public final class RefNmsItemStack {
   @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;getItem()Lnet/minecraft/server/v1_12_R1/Item;")
   @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;")
   public native RefItem getItem();
+
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;save(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)Lnet/minecraft/server/v1_12_R1/NBTTagCompound;")
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/ItemStack;save(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;")
+  public native RefNbtTagCompound save(RefNbtTagCompound nbt);
+
+  @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;load(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V")
+  @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;load(Lnet/minecraft/server/v1_13_R1/NBTTagCompound;)V", accessor = true)
+  @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/ItemStack;load(Lnet/minecraft/nbt/CompoundTag;)V", accessor = true)
+  public native void load(RefNbtTagCompound nbt);
 }

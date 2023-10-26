@@ -123,6 +123,6 @@ public final class NbtItemStack {
 
   @Override
   public NbtItemStack clone() throws CloneNotSupportedException {
-    return new NbtItemStack(itemStack.clone());
+    return new NbtItemStack(NbtUtils.asCopy(itemStack));
   }
 }
