@@ -1,6 +1,5 @@
 import bot.inker.bukkit.nbtbuild.ProcessJarTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import proguard.gradle.ProGuardTask
 
 plugins {
   id("java")
@@ -116,27 +115,8 @@ tasks.create<ShadowJar>("fatJar") {
   relocate("org.objectweb.asm", "bot.inker.bukkit.nbt.internal.asm")
 }
 
-tasks.create<ProGuardTask>("proguard") {
-  dependsOn(tasks["fatJar"])
-  injars(tasks["fatJar"])
-  outputs.file("build/tmp/proguard-opt.jar")
-  outjars("build/tmp/proguard-opt.jar")
-  configuration("configuration.pro")
-  libraryjars(configurations.compileClasspath)
-  libraryjars("${System.getProperty("java.home")}/lib/rt.jar")
-  libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
-  libraryjars("${System.getProperty("java.home")}/jmods/java.logging.jmod")
-  libraryjars("${System.getProperty("java.home")}/jmods/jdk.unsupported.jmod")
-}
-
-tasks.create<ShadowJar>("proguardJar") {
-  from(tasks["proguard"])
-  archiveClassifier.set("opt")
-}
-
 tasks.assemble {
   dependsOn(tasks.shadowJar)
-  dependsOn(tasks["proguardJar"])
 }
 
 publishing {
@@ -156,12 +136,6 @@ publishing {
     create<MavenPublication>("fatJar") {
       artifactId += "-fat"
       artifact(tasks["fatJar"]) {
-        classifier = null
-      }
-    }
-    create<MavenPublication>("proguardJar") {
-      artifactId += "-obf"
-      artifact(tasks["proguardJar"]) {
         classifier = null
       }
     }
