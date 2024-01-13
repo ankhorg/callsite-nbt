@@ -12,11 +12,11 @@ allprojects {
   apply(plugin = "java")
 
   group = "bot.inker.bukkit"
-  val buildNumber = System.getenv("BUILD_NUMBER")
+  val buildNumber = System.getenv("GITHUB_RUN_NUMBER")
   version = if (buildNumber == null) {
-    "1.0-dev-SNAPSHOT"
+    "1.1-dev-SNAPSHOT"
   } else {
-    "1.0-$buildNumber"
+    "1.1-$buildNumber"
   }
 
   java {
@@ -141,25 +141,10 @@ tasks.assemble {
 
 publishing {
   repositories {
-    if (project.version.toString().endsWith("-SNAPSHOT")) {
-      maven("https://repo.inker.bot/repository/maven-snapshots/") {
-        credentials {
-          username = System.getenv("NEXUS_USERNAME")
-          password = System.getenv("NEXUS_PASSWORD")
-        }
-      }
-    } else {
-      maven("https://repo.inker.bot/repository/maven-releases/") {
-        credentials {
-          username = System.getenv("NEXUS_USERNAME")
-          password = System.getenv("NEXUS_PASSWORD")
-        }
-      }
-      maven("https://s0.blobs.inksnow.org/maven/") {
-        credentials {
-          username = System.getenv("REPO_USERNAME")
-          password = System.getenv("REPO_PASSWORD")
-        }
+    maven("https://s0.blobs.inksnow.org/maven/") {
+      credentials {
+        username = System.getenv("IREPO_USERNAME")
+        password = System.getenv("IREPO_PASSWORD")
       }
     }
   }
